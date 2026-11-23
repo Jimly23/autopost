@@ -37,6 +37,11 @@ class SocialAccount extends Model
         return $this->hasOne(SocialToken::class, 'social_account_id');
     }
 
+    public function tokens(): HasOne
+    {
+        return $this->hasOne(SocialToken::class, 'social_account_id');
+    }
+
     public function posts(): HasMany
     {
         return $this->hasMany(Post::class, 'social_account_id');

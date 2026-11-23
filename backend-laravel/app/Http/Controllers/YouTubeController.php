@@ -173,23 +173,84 @@ class YouTubeController extends Controller
 
         $accounts = SocialAccount::where('user_id', $userId)
             ->where('platform', 'youtube')
-            ->with(['tokens:social_account_id,expires_at,token_type'])
+            ->with(['token'])
+            ->orderBy('created_at', 'desc')
             ->get();
 
-        $accountsData = $accounts->map(function ($acc) {
+        $accountsData = $accounts->map(function ($account) {
+            $token = $account->token;
+            $tokenStatus = null;
+
+            if ($token) {
+                $isExpired = $token->expires_at ? Carbon::now()->gt($token->expires_at) : false;
+                $tokenStatus = [
+                    'isExpired' => $isExpired,
+                    'isNearExpiry' => false,
+                    'expiresAt' => $token->expires_at,
+                ];
+            }
+
             return [
-                'id' => $acc->id,
-                'platform' => $acc->platform,
-                'platformUserId' => $acc->platform_user_id,
-                'username' => $acc->username,
-                'accountType' => $acc->account_type,
-                'profilePicture' => $acc->profile_picture,
-                'connectedAt' => $acc->created_at?->toISOString(),
-                'expiresAt' => $acc->tokens?->expires_at?->toISOString(),
+                'id' => $account->id,
+                'platform' => $account->platform,
+                'platformUserId' => $account->platform_user_id,
+                'username' => $account->username,
+                'accountType' => $account->account_type,
+                'profilePicture' => $account->profile_picture,
+                'createdAt' => $account->created_at,
+                'updatedAt' => $account->updated_at,
+                'tokenStatus' => $tokenStatus,
             ];
         });
 
         return ApiResponse::success(['accounts' => $accountsData]);
+    }
+
+    /**
+     * GET /api/youtube/accounts/{id}
+     * Get details of a single connected YouTube account.
+     */
+    public function getAccount(Request $request, string $id): JsonResponse
+    {
+        $userId = $request->session()->get('userId') ?? Auth::id();
+        if (!$userId) {
+            return ApiResponse::unauthorized();
+        }
+
+        $account = SocialAccount::where('id', $id)
+            ->where('user_id', $userId)
+            ->where('platform', 'youtube')
+            ->with(['token'])
+            ->first();
+
+        if (!$account) {
+            return ApiResponse::notFound('YouTube account not found');
+        }
+
+        $token = $account->token;
+        $tokenStatus = null;
+        if ($token) {
+            $isExpired = $token->expires_at ? Carbon::now()->gt($token->expires_at) : false;
+            $tokenStatus = [
+                'isExpired' => $isExpired,
+                'isNearExpiry' => false,
+                'expiresAt' => $token->expires_at,
+            ];
+        }
+
+        return ApiResponse::success([
+            'account' => [
+                'id' => $account->id,
+                'platform' => $account->platform,
+                'platformUserId' => $account->platform_user_id,
+                'username' => $account->username,
+                'accountType' => $account->account_type,
+                'profilePicture' => $account->profile_picture,
+                'createdAt' => $account->created_at,
+                'updatedAt' => $account->updated_at,
+                'tokenStatus' => $tokenStatus,
+            ],
+        ]);
     }
 
     /**

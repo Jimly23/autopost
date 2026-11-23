@@ -48,6 +48,7 @@ Route::prefix('youtube')->group(function () {
     Route::get('/connect', [YouTubeController::class, 'connect']);
     Route::get('/callback', [YouTubeController::class, 'callback']);
     Route::get('/accounts', [YouTubeController::class, 'listAccounts']);
+    Route::get('/accounts/{id}', [YouTubeController::class, 'getAccount']);
     Route::delete('/accounts/{id}', [YouTubeController::class, 'deleteAccount']);
 });
 

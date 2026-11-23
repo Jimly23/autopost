@@ -34,8 +34,14 @@ export const SocialAccounts: React.FC = () => {
   const loadAccounts = async () => {
     try {
       const [igData, ytData] = await Promise.all([
-        instagramService.getAccounts().catch(() => []),
-        youtubeService.getAccounts().catch(() => []),
+        instagramService.getAccounts().catch((err) => {
+          console.error('Failed to load Instagram accounts:', err);
+          return [];
+        }),
+        youtubeService.getAccounts().catch((err) => {
+          console.error('Failed to load YouTube accounts:', err);
+          return [];
+        }),
       ]);
       setAccounts([...igData, ...ytData]);
     } catch (err) {
@@ -184,7 +190,7 @@ export const SocialAccounts: React.FC = () => {
                       </span>
                     </div>
                     <span className="text-[11px] text-slate-400 font-mono">
-                      ID: {acc.platformUserId.slice(0, 10)}...
+                      ID: {acc.platformUserId ? (acc.platformUserId.length > 10 ? acc.platformUserId.slice(0, 10) + '...' : acc.platformUserId) : 'N/A'}
                     </span>
                   </CardHeader>
 
@@ -214,7 +220,7 @@ export const SocialAccounts: React.FC = () => {
                         </a>
                       </div>
                       <p className="text-xs text-slate-500 mt-0.5">
-                        Connected: {new Date(acc.createdAt).toLocaleDateString()}
+                        Connected: {acc.createdAt ? new Date(acc.createdAt).toLocaleDateString() : 'Active'}
                       </p>
 
                       {/* Token Status Badge */}

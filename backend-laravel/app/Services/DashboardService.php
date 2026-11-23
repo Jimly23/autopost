@@ -16,7 +16,6 @@ class DashboardService
         $now = Carbon::now();
 
         $totalAccounts = SocialAccount::where('user_id', $userId)
-            ->where('platform', 'instagram')
             ->count();
 
         $totalPosts = Post::where('user_id', $userId)->count();
