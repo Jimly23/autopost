@@ -18,9 +18,9 @@ class MediaController extends Controller
 
     /**
      * Maximum accepted upload size for videos (bytes).
-     * Kept below PHP's upload_max_filesize (40 MB) to leave room for multipart overhead.
+     * Supports up to 100 MB for YouTube standard videos and Shorts.
      */
-    private const MAX_VIDEO_BYTES = 38 * 1024 * 1024; // 38 MB
+    private const MAX_VIDEO_BYTES = 100 * 1024 * 1024; // 100 MB
 
     /**
      * Instagram only accepts images up to 8 MB, so the converted JPEG must stay below this.
@@ -70,7 +70,7 @@ class MediaController extends Controller
         }
 
         if ($isVideo && $size > self::MAX_VIDEO_BYTES) {
-            return ApiResponse::error('Video is too large. Maximum video size is 38 MB.', 422);
+            return ApiResponse::error('Video is too large. Maximum video size is 100 MB.', 422);
         }
 
         if ($isVideo && !in_array($mimeType, ['video/mp4', 'video/quicktime'], true)) {
