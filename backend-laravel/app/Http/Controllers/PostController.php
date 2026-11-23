@@ -31,10 +31,12 @@ class PostController extends Controller
 
         $validator = Validator::make($request->all(), [
             'socialAccountId' => 'required|uuid',
-            'caption' => 'nullable|string|max:2200',
-            'mediaType' => 'required|string|in:IMAGE,VIDEO,REELS',
-            'mediaUrl' => 'required|url|starts_with:https://',
-            'scheduledAt' => 'nullable|date|after:now',
+            'title' => 'nullable|string|max:100',
+            'caption' => 'nullable|string|max:5000',
+            'mediaType' => 'required|string|in:IMAGE,VIDEO,REELS,SHORTS',
+            'mediaUrl' => 'required|url',
+            'privacyStatus' => 'nullable|string|in:public,unlisted,private',
+            'scheduledAt' => 'nullable|date',
         ]);
 
         if ($validator->fails()) {
@@ -121,9 +123,11 @@ class PostController extends Controller
 
         $validator = Validator::make($request->all(), [
             'socialAccountId' => 'nullable|uuid',
-            'caption' => 'nullable|string|max:2200',
-            'mediaType' => 'nullable|string|in:IMAGE,VIDEO,REELS',
-            'mediaUrl' => 'nullable|url|starts_with:https://',
+            'title' => 'nullable|string|max:100',
+            'caption' => 'nullable|string|max:5000',
+            'mediaType' => 'nullable|string|in:IMAGE,VIDEO,REELS,SHORTS',
+            'mediaUrl' => 'nullable|url',
+            'privacyStatus' => 'nullable|string|in:public,unlisted,private',
             'scheduledAt' => 'nullable|date',
         ]);
 

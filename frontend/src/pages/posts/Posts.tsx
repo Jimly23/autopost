@@ -21,6 +21,7 @@ import {
   Edit2,
   Clock,
   Instagram,
+  Youtube,
   AlertCircle,
 } from 'lucide-react';
 
@@ -248,13 +249,28 @@ export const Posts: React.FC = () => {
                       <div className="flex items-center gap-2 mb-1">
                         <Badge status={post.status} size="sm" />
                         <span className="text-xs font-semibold text-slate-700 flex items-center gap-1">
-                          <Instagram className="w-3 h-3 text-pink-500" />
-                          @{post.socialAccount?.username || 'instagram'}
+                          {post.socialAccount?.platform === 'youtube' ? (
+                            <>
+                              <Youtube className="w-3.5 h-3.5 text-red-600" />
+                              {post.socialAccount?.username || 'YouTube'}
+                            </>
+                          ) : (
+                            <>
+                              <Instagram className="w-3 h-3 text-pink-500" />
+                              @{post.socialAccount?.username || 'instagram'}
+                            </>
+                          )}
                         </span>
                         <span className="text-[11px] text-slate-400">
                           {new Date(post.createdAt).toLocaleDateString()}
                         </span>
                       </div>
+
+                      {post.title && (
+                        <h4 className="text-xs font-bold text-slate-900 mb-0.5 line-clamp-1">
+                          {post.title}
+                        </h4>
+                      )}
 
                       <p className="text-xs text-slate-800 line-clamp-2 leading-relaxed">
                         {post.caption || <span className="text-slate-400 italic">(No caption provided)</span>}
@@ -284,17 +300,29 @@ export const Posts: React.FC = () => {
 
                   {/* Right: Actions */}
                   <div className="flex items-center gap-2 shrink-0 self-end sm:self-center">
-                    {/* View on Instagram permalink if published */}
+                    {/* View on Platform permalink if published */}
                     {post.status === 'published' && (
-                      <a
-                        href={`https://www.instagram.com/`}
-                        target="_blank"
-                        rel="noreferrer"
-                        className="text-xs text-slate-600 hover:text-slate-900 font-medium flex items-center gap-1 p-1.5 hover:bg-slate-100 rounded-md transition-colors"
-                      >
-                        <ExternalLink className="w-3.5 h-3.5" />
-                        <span>Instagram</span>
-                      </a>
+                      post.socialAccount?.platform === 'youtube' && post.platformPostId ? (
+                        <a
+                          href={`https://www.youtube.com/watch?v=${post.platformPostId}`}
+                          target="_blank"
+                          rel="noreferrer"
+                          className="text-xs text-red-600 hover:text-red-700 font-medium flex items-center gap-1 p-1.5 hover:bg-red-50 rounded-md transition-colors"
+                        >
+                          <ExternalLink className="w-3.5 h-3.5" />
+                          <span>YouTube</span>
+                        </a>
+                      ) : (
+                        <a
+                          href="https://www.instagram.com/"
+                          target="_blank"
+                          rel="noreferrer"
+                          className="text-xs text-slate-600 hover:text-slate-900 font-medium flex items-center gap-1 p-1.5 hover:bg-slate-100 rounded-md transition-colors"
+                        >
+                          <ExternalLink className="w-3.5 h-3.5" />
+                          <span>Instagram</span>
+                        </a>
+                      )
                     )}
 
                     {/* Publish Now button for draft or failed */}

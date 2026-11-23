@@ -15,6 +15,7 @@ import {
   PlusCircle,
   Clock,
   Instagram,
+  Youtube,
   X,
   ExternalLink,
 } from 'lucide-react';
@@ -233,16 +234,27 @@ export const Planner: React.FC = () => {
 
                 {/* Day posts badges */}
                 <div className="space-y-1 overflow-y-auto max-h-16 my-1">
-                  {dayPosts.map((p) => (
-                    <button
-                      key={p.id}
-                      onClick={() => handleOpenPost(p)}
-                      className="w-full text-left p-1 rounded bg-blue-50/80 hover:bg-blue-100/90 border border-blue-200/80 text-[11px] font-medium text-blue-900 truncate flex items-center gap-1 transition-colors"
-                    >
-                      <Clock className="w-2.5 h-2.5 text-blue-600 shrink-0" />
-                      <span className="truncate">{p.caption || 'Scheduled Post'}</span>
-                    </button>
-                  ))}
+                  {dayPosts.map((p) => {
+                    const isYT = p.socialAccount?.platform === 'youtube';
+                    return (
+                      <button
+                        key={p.id}
+                        onClick={() => handleOpenPost(p)}
+                        className={`w-full text-left p-1 rounded text-[11px] font-medium truncate flex items-center gap-1 transition-colors ${
+                          isYT
+                            ? 'bg-red-50/80 hover:bg-red-100/90 border border-red-200/80 text-red-900'
+                            : 'bg-blue-50/80 hover:bg-blue-100/90 border border-blue-200/80 text-blue-900'
+                        }`}
+                      >
+                        {isYT ? (
+                          <Youtube className="w-2.5 h-2.5 text-red-600 shrink-0" />
+                        ) : (
+                          <Instagram className="w-2.5 h-2.5 text-pink-500 shrink-0" />
+                        )}
+                        <span className="truncate">{p.title || p.caption || 'Scheduled Post'}</span>
+                      </button>
+                    );
+                  })}
                 </div>
 
                 <div className="text-[10px] text-slate-300 group-hover:text-slate-400 text-right">
@@ -275,10 +287,25 @@ export const Planner: React.FC = () => {
               <div className="min-w-0 flex-1 space-y-1">
                 <div className="flex items-center gap-2">
                   <Badge status="scheduled" size="sm" />
-                  <span className="text-xs text-slate-500 font-medium">
-                    @{selectedPost.socialAccount?.username || 'instagram'}
+                  <span className="text-xs text-slate-500 font-medium flex items-center gap-1">
+                    {selectedPost.socialAccount?.platform === 'youtube' ? (
+                      <>
+                        <Youtube className="w-3 h-3 text-red-600" />
+                        {selectedPost.socialAccount?.username || 'YouTube Channel'}
+                      </>
+                    ) : (
+                      <>
+                        <Instagram className="w-3 h-3 text-pink-500" />
+                        @{selectedPost.socialAccount?.username || 'instagram'}
+                      </>
+                    )}
                   </span>
                 </div>
+                {selectedPost.title && (
+                  <h4 className="text-xs font-bold text-slate-900 line-clamp-1">
+                    {selectedPost.title}
+                  </h4>
+                )}
                 <p className="text-xs text-slate-800 line-clamp-3">
                   {selectedPost.caption || '(No caption)'}
                 </p>

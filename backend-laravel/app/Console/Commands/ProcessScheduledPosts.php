@@ -6,6 +6,8 @@ use App\Models\Post;
 use App\Models\PublishingLog;
 use App\Services\Instagram\InstagramPublishingService;
 use App\Services\Instagram\InstagramTokenService;
+use App\Services\YouTube\YouTubePublishingService;
+use App\Services\YouTube\YouTubeTokenService;
 use Carbon\Carbon;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Log;
@@ -13,20 +15,26 @@ use Illuminate\Support\Facades\Log;
 class ProcessScheduledPosts extends Command
 {
     protected $signature = 'posts:process-scheduled {--recover : Recover stuck processing posts first}';
-    protected $description = 'Process scheduled posts that are due for publishing to Instagram';
+    protected $description = 'Process scheduled posts that are due for publishing to social platforms';
 
     protected const MAX_RETRY_ATTEMPTS = 3;
 
     protected InstagramTokenService $tokenService;
     protected InstagramPublishingService $publishingService;
+    protected YouTubeTokenService $youtubeTokenService;
+    protected YouTubePublishingService $youtubePublishingService;
 
     public function __construct(
         InstagramTokenService $tokenService,
-        InstagramPublishingService $publishingService
+        InstagramPublishingService $publishingService,
+        YouTubeTokenService $youtubeTokenService,
+        YouTubePublishingService $youtubePublishingService
     ) {
         parent::__construct();
         $this->tokenService = $tokenService;
         $this->publishingService = $publishingService;
+        $this->youtubeTokenService = $youtubeTokenService;
+        $this->youtubePublishingService = $youtubePublishingService;
     }
 
     public function handle(): int
@@ -81,38 +89,78 @@ class ProcessScheduledPosts extends Command
         ]);
 
         try {
-            $tokenData = $this->tokenService->getDecryptedToken($post->social_account_id);
+            $platform = strtolower($post->socialAccount->platform ?? 'instagram');
 
-            $result = $this->publishingService->publishContent(
-                $tokenData['accessToken'],
-                $post->socialAccount->platform_user_id,
-                [
-                    'mediaType' => $post->media_type,
-                    'mediaUrl' => $post->media_url,
-                    'caption' => $post->caption,
-                ]
-            );
+            if ($platform === 'youtube') {
+                $accessToken = $this->youtubeTokenService->getValidAccessToken($post->social_account_id);
 
-            Post::where('id', $post->id)->update([
-                'status' => 'published',
-                'published_at' => Carbon::now(),
-                'platform_post_id' => $result['mediaId'],
-                'error_message' => null,
-            ]);
+                $result = $this->youtubePublishingService->publishVideo(
+                    $accessToken,
+                    [
+                        'title' => $post->title ?: $post->caption,
+                        'caption' => $post->caption,
+                        'description' => $post->caption,
+                        'mediaUrl' => $post->media_url,
+                        'mediaType' => $post->media_type,
+                        'privacyStatus' => $post->privacy_status ?? 'public',
+                    ]
+                );
 
-            PublishingLog::create([
-                'post_id' => $post->id,
-                'action' => 'scheduled_publish_complete',
-                'status' => 'success',
-                'response_data' => json_encode([
-                    'containerId' => $result['containerId'],
-                    'mediaId' => $result['mediaId'],
-                ]),
-                'created_at' => Carbon::now(),
-            ]);
+                Post::where('id', $post->id)->update([
+                    'status' => 'published',
+                    'published_at' => Carbon::now(),
+                    'platform_post_id' => $result['videoId'],
+                    'error_message' => null,
+                ]);
 
-            $this->info("Scheduler: Post {$post->id} published successfully to @{$post->socialAccount->username}");
-            Log::info("Scheduler: Post {$post->id} published successfully to @{$post->socialAccount->username}");
+                PublishingLog::create([
+                    'post_id' => $post->id,
+                    'action' => 'scheduled_publish_complete',
+                    'status' => 'success',
+                    'response_data' => json_encode([
+                        'videoId' => $result['videoId'],
+                        'videoUrl' => $result['videoUrl'],
+                    ]),
+                    'created_at' => Carbon::now(),
+                ]);
+
+                $this->info("Scheduler: YouTube video {$post->id} published successfully to {$post->socialAccount->username}");
+                Log::info("Scheduler: YouTube video {$post->id} published successfully to {$post->socialAccount->username}");
+            } else {
+                // Default: Instagram
+                $tokenData = $this->tokenService->getDecryptedToken($post->social_account_id);
+
+                $result = $this->publishingService->publishContent(
+                    $tokenData['accessToken'],
+                    $post->socialAccount->platform_user_id,
+                    [
+                        'mediaType' => $post->media_type,
+                        'mediaUrl' => $post->media_url,
+                        'caption' => $post->caption,
+                    ]
+                );
+
+                Post::where('id', $post->id)->update([
+                    'status' => 'published',
+                    'published_at' => Carbon::now(),
+                    'platform_post_id' => $result['mediaId'],
+                    'error_message' => null,
+                ]);
+
+                PublishingLog::create([
+                    'post_id' => $post->id,
+                    'action' => 'scheduled_publish_complete',
+                    'status' => 'success',
+                    'response_data' => json_encode([
+                        'containerId' => $result['containerId'],
+                        'mediaId' => $result['mediaId'],
+                    ]),
+                    'created_at' => Carbon::now(),
+                ]);
+
+                $this->info("Scheduler: Post {$post->id} published successfully to @{$post->socialAccount->username}");
+                Log::info("Scheduler: Post {$post->id} published successfully to @{$post->socialAccount->username}");
+            }
         } catch (\Throwable $e) {
             $this->error("Scheduler: Failed to publish post {$post->id}: {$e->getMessage()}");
             Log::error("Scheduler: Failed to publish post {$post->id}: {$e->getMessage()}");

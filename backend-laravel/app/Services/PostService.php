@@ -7,6 +7,8 @@ use App\Models\PublishingLog;
 use App\Models\SocialAccount;
 use App\Services\Instagram\InstagramPublishingService;
 use App\Services\Instagram\InstagramTokenService;
+use App\Services\YouTube\YouTubePublishingService;
+use App\Services\YouTube\YouTubeTokenService;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
@@ -16,13 +18,19 @@ class PostService
 {
     protected InstagramTokenService $tokenService;
     protected InstagramPublishingService $publishingService;
+    protected YouTubeTokenService $youtubeTokenService;
+    protected YouTubePublishingService $youtubePublishingService;
 
     public function __construct(
         InstagramTokenService $tokenService,
-        InstagramPublishingService $publishingService
+        InstagramPublishingService $publishingService,
+        YouTubeTokenService $youtubeTokenService,
+        YouTubePublishingService $youtubePublishingService
     ) {
         $this->tokenService = $tokenService;
         $this->publishingService = $publishingService;
+        $this->youtubeTokenService = $youtubeTokenService;
+        $this->youtubePublishingService = $youtubePublishingService;
     }
 
     /**
@@ -46,9 +54,11 @@ class PostService
         $post = Post::create([
             'user_id' => $userId,
             'social_account_id' => $data['socialAccountId'],
+            'title' => $data['title'] ?? null,
             'caption' => $data['caption'] ?? null,
             'media_type' => $data['mediaType'],
             'media_url' => $data['mediaUrl'],
+            'privacy_status' => $data['privacyStatus'] ?? $data['privacy_status'] ?? 'public',
             'scheduled_at' => $scheduledAt,
             'status' => $status,
         ]);
@@ -136,8 +146,16 @@ class PostService
             throw $error;
         }
 
+        if (array_key_exists('title', $data)) {
+            $post->title = $data['title'];
+        }
         if (array_key_exists('caption', $data)) {
             $post->caption = $data['caption'];
+        }
+        if (array_key_exists('privacyStatus', $data)) {
+            $post->privacy_status = $data['privacyStatus'];
+        } elseif (array_key_exists('privacy_status', $data)) {
+            $post->privacy_status = $data['privacy_status'];
         }
         if (array_key_exists('mediaType', $data)) {
             $post->media_type = $data['mediaType'];
@@ -244,36 +262,72 @@ class PostService
             return $p;
         });
 
-        // Step 2: Publish to Instagram outside the transaction
+        // Step 2: Publish to Social Platform outside the transaction
         try {
-            $tokenData = $this->tokenService->getDecryptedToken($post->social_account_id);
+            $platform = strtolower($post->socialAccount->platform ?? 'instagram');
 
-            $result = $this->publishingService->publishContent(
-                $tokenData['accessToken'],
-                $post->socialAccount->platform_user_id,
-                [
-                    'mediaType' => $post->media_type,
-                    'mediaUrl' => $post->media_url,
-                    'caption' => $post->caption,
-                ]
-            );
+            if ($platform === 'youtube') {
+                $accessToken = $this->youtubeTokenService->getValidAccessToken($post->social_account_id);
 
-            $post->status = 'published';
-            $post->published_at = Carbon::now();
-            $post->platform_post_id = $result['mediaId'];
-            $post->error_message = null;
-            $post->save();
+                $result = $this->youtubePublishingService->publishVideo(
+                    $accessToken,
+                    [
+                        'title' => $post->title ?: $post->caption,
+                        'caption' => $post->caption,
+                        'description' => $post->caption,
+                        'mediaUrl' => $post->media_url,
+                        'mediaType' => $post->media_type,
+                        'privacyStatus' => $post->privacy_status ?? 'public',
+                    ]
+                );
 
-            PublishingLog::create([
-                'post_id' => $postId,
-                'action' => 'publish_complete',
-                'status' => 'success',
-                'response_data' => json_encode([
-                    'containerId' => $result['containerId'],
-                    'mediaId' => $result['mediaId'],
-                ]),
-                'created_at' => Carbon::now(),
-            ]);
+                $post->status = 'published';
+                $post->published_at = Carbon::now();
+                $post->platform_post_id = $result['videoId'];
+                $post->error_message = null;
+                $post->save();
+
+                PublishingLog::create([
+                    'post_id' => $postId,
+                    'action' => 'publish_complete',
+                    'status' => 'success',
+                    'response_data' => json_encode([
+                        'videoId' => $result['videoId'],
+                        'videoUrl' => $result['videoUrl'],
+                    ]),
+                    'created_at' => Carbon::now(),
+                ]);
+            } else {
+                // Default: Instagram
+                $tokenData = $this->tokenService->getDecryptedToken($post->social_account_id);
+
+                $result = $this->publishingService->publishContent(
+                    $tokenData['accessToken'],
+                    $post->socialAccount->platform_user_id,
+                    [
+                        'mediaType' => $post->media_type,
+                        'mediaUrl' => $post->media_url,
+                        'caption' => $post->caption,
+                    ]
+                );
+
+                $post->status = 'published';
+                $post->published_at = Carbon::now();
+                $post->platform_post_id = $result['mediaId'];
+                $post->error_message = null;
+                $post->save();
+
+                PublishingLog::create([
+                    'post_id' => $postId,
+                    'action' => 'publish_complete',
+                    'status' => 'success',
+                    'response_data' => json_encode([
+                        'containerId' => $result['containerId'],
+                        'mediaId' => $result['mediaId'],
+                    ]),
+                    'created_at' => Carbon::now(),
+                ]);
+            }
 
             return $post->load(['socialAccount:id,username,platform']);
         } catch (\Throwable $e) {

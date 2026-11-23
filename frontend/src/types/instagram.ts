@@ -1,6 +1,6 @@
 export interface SocialAccount {
   id: string;
-  platform: 'instagram';
+  platform: 'instagram' | 'youtube';
   platformUserId: string;
   username: string;
   accountType?: string | null;

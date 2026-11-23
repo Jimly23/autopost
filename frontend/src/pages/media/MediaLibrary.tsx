@@ -45,8 +45,8 @@ export const MediaLibrary: React.FC = () => {
             url: p.mediaUrl,
             filename: p.mediaUrl.split('/').pop() || 'post-media',
             originalName: p.mediaUrl.split('/').pop() || 'post-media',
-            mimetype: p.mediaType === 'VIDEO' ? 'video/mp4' : 'image/jpeg',
-            mediaType: p.mediaType,
+            mimetype: p.mediaType === 'IMAGE' ? 'image/jpeg' : 'video/mp4',
+            mediaType: p.mediaType === 'IMAGE' ? 'IMAGE' : 'VIDEO',
             size: 0,
             createdAt: p.createdAt,
           });

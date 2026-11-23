@@ -19,6 +19,7 @@ class SocialToken extends Model
         'id',
         'social_account_id',
         'access_token',
+        'refresh_token',
         'token_type',
         'expires_at',
         'scopes',

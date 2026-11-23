@@ -5,6 +5,7 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\InstagramController;
 use App\Http\Controllers\MediaController;
 use App\Http\Controllers\PostController;
+use App\Http\Controllers\YouTubeController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -38,6 +39,16 @@ Route::prefix('auth')->group(function () {
     Route::get('/me', [AuthController::class, 'me']);
     Route::put('/profile', [AuthController::class, 'updateProfile']);
     Route::put('/password', [AuthController::class, 'changePassword']);
+    Route::get('/youtube/callback', [YouTubeController::class, 'callback']);
+    Route::get('/youtube/connect', [YouTubeController::class, 'connect']);
+});
+
+// ─── YouTube Routes ───────────────────────────────────────────────────────
+Route::prefix('youtube')->group(function () {
+    Route::get('/connect', [YouTubeController::class, 'connect']);
+    Route::get('/callback', [YouTubeController::class, 'callback']);
+    Route::get('/accounts', [YouTubeController::class, 'listAccounts']);
+    Route::delete('/accounts/{id}', [YouTubeController::class, 'deleteAccount']);
 });
 
 // ─── Instagram Routes ─────────────────────────────────────────────────────
