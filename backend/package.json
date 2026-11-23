@@ -1,0 +1,59 @@
+{
+  "name": "automation-backend",
+  "version": "1.0.0",
+  "description": "Social media automation platform - Backend API",
+  "type": "module",
+  "main": "src/server.js",
+  "scripts": {
+    "dev": "node --watch-path=src src/server.js",
+    "start": "node src/server.js",
+    "db:generate": "npx prisma generate",
+    "db:migrate": "npx prisma migrate dev",
+    "db:migrate:prod": "npx prisma migrate deploy",
+    "db:push": "npx prisma db push",
+    "db:seed": "node prisma/seed.js",
+    "db:studio": "npx prisma studio",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:coverage": "vitest run --coverage",
+    "scheduler": "node src/scheduler.js"
+  },
+  "keywords": [
+    "social-media",
+    "automation",
+    "instagram",
+    "api"
+  ],
+  "license": "ISC",
+  "dependencies": {
+    "@prisma/adapter-mariadb": "^7.10.1",
+    "@prisma/client": "^7.10.1",
+    "bcryptjs": "^3.0.3",
+    "cookie-parser": "^1.4.7",
+    "cors": "^2.8.6",
+    "csurf": "^1.11.0",
+    "dotenv": "^18.0.10",
+    "express": "^5.3.0",
+    "express-mysql-session": "^3.0.3",
+    "express-rate-limit": "^8.7.5",
+    "express-session": "^1.19.0",
+    "helmet": "^8.3.0",
+    "mariadb": "^3.5.5",
+    "morgan": "^1.12.1",
+    "multer": "^2.5.0",
+    "node-cron": "^4.6.0",
+    "prisma": "^7.10.1",
+    "uuid": "^14.0.3",
+    "winston": "^3.19.0",
+    "zod": "^4.6.7"
+  },
+  "devDependencies": {
+    "@vitest/coverage-v8": "^5.1.1",
+    "supertest": "^7.3.2",
+    "vitest": "^5.1.1"
+  },
+  "allowScripts": {
+    "prisma@7.10.1": true,
+    "@prisma/engines@7.10.1": true
+  }
+}

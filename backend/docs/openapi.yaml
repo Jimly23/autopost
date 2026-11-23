@@ -1,0 +1,894 @@
+openapi: 3.1.0
+info:
+  title: Automation - Social Media Management API
+  description: |
+    Backend API for the Automation platform — a social media management SaaS
+    that lets users connect Instagram accounts, create content, and schedule
+    posts via the official Meta Instagram API.
+
+    ## Authentication
+    All protected endpoints require a valid session cookie (`automation.sid`).
+    Obtain a session by calling `POST /api/auth/login`.
+
+    ## CSRF Protection
+    State-changing requests (POST, PUT, DELETE) require a CSRF token.
+    1. `GET /api/csrf-token` → returns `{ data: { csrfToken } }`
+    2. Send the token in the `X-CSRF-Token` header on subsequent requests.
+
+    > CSRF enforcement is **relaxed in development** mode for easier testing.
+
+    ## Instagram API Configuration
+    Endpoints under `/api/instagram` require a configured Meta App.
+    See the README for setup instructions.
+  version: 1.0.0
+  license:
+    name: ISC
+
+servers:
+  - url: http://localhost:3000
+    description: Local development
+
+tags:
+  - name: Health
+    description: Server health check
+  - name: Auth
+    description: User registration, login, logout, and profile management
+  - name: Instagram
+    description: Instagram OAuth connection and account management
+  - name: Posts
+    description: Post creation, scheduling, and publishing
+  - name: Dashboard
+    description: Dashboard statistics and overview
+  - name: CSRF
+    description: CSRF token management
+
+components:
+  schemas:
+    SuccessResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: true
+        message:
+          type: string
+        data:
+          type: object
+
+    ErrorResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: false
+        message:
+          type: string
+        errors:
+          type: array
+          items:
+            type: object
+            properties:
+              field:
+                type: string
+              message:
+                type: string
+
+    User:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          type: string
+        email:
+          type: string
+          format: email
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+
+    SocialAccount:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        platform:
+          type: string
+          example: instagram
+        platformUserId:
+          type: string
+        username:
+          type: string
+        accountType:
+          type: string
+          nullable: true
+        profilePicture:
+          type: string
+          nullable: true
+        createdAt:
+          type: string
+          format: date-time
+        tokenStatus:
+          type: object
+          nullable: true
+          properties:
+            isExpired:
+              type: boolean
+            isNearExpiry:
+              type: boolean
+            expiresAt:
+              type: string
+              format: date-time
+              nullable: true
+
+    Post:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        userId:
+          type: string
+          format: uuid
+        socialAccountId:
+          type: string
+          format: uuid
+        caption:
+          type: string
+          nullable: true
+        mediaType:
+          type: string
+          enum: [IMAGE, VIDEO]
+        mediaUrl:
+          type: string
+          format: uri
+        scheduledAt:
+          type: string
+          format: date-time
+          nullable: true
+        publishedAt:
+          type: string
+          format: date-time
+          nullable: true
+        status:
+          type: string
+          enum: [draft, scheduled, processing, published, failed, cancelled]
+        platformPostId:
+          type: string
+          nullable: true
+        errorMessage:
+          type: string
+          nullable: true
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+        socialAccount:
+          type: object
+          properties:
+            id:
+              type: string
+            username:
+              type: string
+            platform:
+              type: string
+
+    PublishingLog:
+      type: object
+      properties:
+        action:
+          type: string
+        status:
+          type: string
+        errorMessage:
+          type: string
+          nullable: true
+        createdAt:
+          type: string
+          format: date-time
+
+    DashboardOverview:
+      type: object
+      properties:
+        totalAccounts:
+          type: integer
+        totalPosts:
+          type: integer
+        scheduledPosts:
+          type: integer
+        publishedPosts:
+          type: integer
+        failedPosts:
+          type: integer
+        recentPosts:
+          type: array
+          items:
+            $ref: '#/components/schemas/Post'
+        upcomingScheduled:
+          type: array
+          items:
+            $ref: '#/components/schemas/Post'
+
+  securitySchemes:
+    sessionAuth:
+      type: apiKey
+      in: cookie
+      name: automation.sid
+      description: Session cookie set by POST /api/auth/login
+
+  parameters:
+    PostId:
+      name: id
+      in: path
+      required: true
+      schema:
+        type: string
+        format: uuid
+    AccountId:
+      name: id
+      in: path
+      required: true
+      schema:
+        type: string
+        format: uuid
+
+paths:
+  /api/health:
+    get:
+      tags: [Health]
+      summary: Health check
+      responses:
+        '200':
+          description: Server is healthy
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessResponse'
+
+  /api/csrf-token:
+    get:
+      tags: [CSRF]
+      summary: Get CSRF token
+      description: Returns a CSRF token to include in the `X-CSRF-Token` header for state-changing requests.
+      responses:
+        '200':
+          description: CSRF token
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  data:
+                    type: object
+                    properties:
+                      csrfToken:
+                        type: string
+
+  # ── Auth ─────────────────────────────────────────────────────
+  /api/auth/register:
+    post:
+      tags: [Auth]
+      summary: Register a new user
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [name, email, password]
+              properties:
+                name:
+                  type: string
+                  minLength: 2
+                  maxLength: 255
+                  example: John Doe
+                email:
+                  type: string
+                  format: email
+                  example: john@example.com
+                password:
+                  type: string
+                  minLength: 8
+                  maxLength: 128
+                  example: securePass123
+      responses:
+        '201':
+          description: User registered and logged in
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/SuccessResponse'
+                  - properties:
+                      data:
+                        type: object
+                        properties:
+                          user:
+                            $ref: '#/components/schemas/User'
+        '409':
+          description: Email already exists
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '422':
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /api/auth/login:
+    post:
+      tags: [Auth]
+      summary: Login
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [email, password]
+              properties:
+                email:
+                  type: string
+                  format: email
+                password:
+                  type: string
+      responses:
+        '200':
+          description: Login successful. Session cookie is set.
+          headers:
+            Set-Cookie:
+              description: Session cookie
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/SuccessResponse'
+                  - properties:
+                      data:
+                        type: object
+                        properties:
+                          user:
+                            $ref: '#/components/schemas/User'
+        '401':
+          description: Invalid credentials
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /api/auth/logout:
+    post:
+      tags: [Auth]
+      summary: Logout
+      security:
+        - sessionAuth: []
+      responses:
+        '200':
+          description: Logged out
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessResponse'
+
+  /api/auth/me:
+    get:
+      tags: [Auth]
+      summary: Get current user
+      security:
+        - sessionAuth: []
+      responses:
+        '200':
+          description: Current user data
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/SuccessResponse'
+                  - properties:
+                      data:
+                        type: object
+                        properties:
+                          user:
+                            $ref: '#/components/schemas/User'
+        '401':
+          description: Not authenticated
+
+  /api/auth/profile:
+    put:
+      tags: [Auth]
+      summary: Update profile
+      security:
+        - sessionAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  minLength: 2
+                  maxLength: 255
+                email:
+                  type: string
+                  format: email
+      responses:
+        '200':
+          description: Profile updated
+        '409':
+          description: Email already in use
+        '422':
+          description: Validation error
+
+  /api/auth/password:
+    put:
+      tags: [Auth]
+      summary: Change password
+      security:
+        - sessionAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [currentPassword, newPassword]
+              properties:
+                currentPassword:
+                  type: string
+                newPassword:
+                  type: string
+                  minLength: 8
+                  maxLength: 128
+      responses:
+        '200':
+          description: Password changed
+        '400':
+          description: Current password incorrect
+
+  # ── Instagram ────────────────────────────────────────────────
+  /api/instagram/connect:
+    get:
+      tags: [Instagram]
+      summary: Initiate Instagram OAuth connection
+      description: |
+        Redirects the user to Instagram's authorization page.
+        After authorization, Instagram redirects to `/api/instagram/callback`.
+      security:
+        - sessionAuth: []
+      responses:
+        '302':
+          description: Redirect to Instagram authorization page
+
+  /api/instagram/callback:
+    get:
+      tags: [Instagram]
+      summary: Instagram OAuth callback
+      description: |
+        Handles the redirect from Instagram after user authorization.
+        Exchanges the authorization code for tokens, fetches the profile,
+        stores the account, and redirects to the frontend.
+      parameters:
+        - name: code
+          in: query
+          schema:
+            type: string
+        - name: state
+          in: query
+          schema:
+            type: string
+        - name: error
+          in: query
+          schema:
+            type: string
+        - name: error_description
+          in: query
+          schema:
+            type: string
+      responses:
+        '302':
+          description: Redirect to frontend with status
+
+  /api/instagram/accounts:
+    get:
+      tags: [Instagram]
+      summary: List connected Instagram accounts
+      security:
+        - sessionAuth: []
+      responses:
+        '200':
+          description: List of connected Instagram accounts
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/SuccessResponse'
+                  - properties:
+                      data:
+                        type: object
+                        properties:
+                          accounts:
+                            type: array
+                            items:
+                              $ref: '#/components/schemas/SocialAccount'
+
+  /api/instagram/accounts/{id}:
+    get:
+      tags: [Instagram]
+      summary: Get a connected Instagram account
+      security:
+        - sessionAuth: []
+      parameters:
+        - $ref: '#/components/parameters/AccountId'
+      responses:
+        '200':
+          description: Account details
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/SuccessResponse'
+                  - properties:
+                      data:
+                        type: object
+                        properties:
+                          account:
+                            $ref: '#/components/schemas/SocialAccount'
+        '404':
+          description: Account not found
+    delete:
+      tags: [Instagram]
+      summary: Disconnect an Instagram account
+      security:
+        - sessionAuth: []
+      parameters:
+        - $ref: '#/components/parameters/AccountId'
+      responses:
+        '200':
+          description: Account disconnected
+        '400':
+          description: Account has pending posts
+        '404':
+          description: Account not found
+
+  /api/instagram/accounts/{id}/profile:
+    get:
+      tags: [Instagram]
+      summary: Fetch fresh Instagram profile
+      description: Fetches the latest profile data from the Instagram API and updates the stored data.
+      security:
+        - sessionAuth: []
+      parameters:
+        - $ref: '#/components/parameters/AccountId'
+      responses:
+        '200':
+          description: Profile data
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/SuccessResponse'
+                  - properties:
+                      data:
+                        type: object
+                        properties:
+                          profile:
+                            type: object
+                            properties:
+                              platformUserId:
+                                type: string
+                              username:
+                                type: string
+                              accountType:
+                                type: string
+                              profilePicture:
+                                type: string
+                                nullable: true
+        '401':
+          description: Token expired
+        '404':
+          description: Account not found
+
+  # ── Posts ─────────────────────────────────────────────────────
+  /api/posts:
+    post:
+      tags: [Posts]
+      summary: Create a new post
+      security:
+        - sessionAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [socialAccountId, mediaType, mediaUrl]
+              properties:
+                socialAccountId:
+                  type: string
+                  format: uuid
+                caption:
+                  type: string
+                  maxLength: 2200
+                  example: "Check out this photo! #automation"
+                mediaType:
+                  type: string
+                  enum: [IMAGE, VIDEO]
+                mediaUrl:
+                  type: string
+                  format: uri
+                  description: Must be a publicly accessible HTTPS URL
+                  example: "https://example.com/photo.jpg"
+                scheduledAt:
+                  type: string
+                  format: date-time
+                  description: ISO 8601 datetime. If provided, post status is set to 'scheduled'.
+                  example: "2026-12-01T10:00:00Z"
+      responses:
+        '201':
+          description: Post created
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/SuccessResponse'
+                  - properties:
+                      data:
+                        type: object
+                        properties:
+                          post:
+                            $ref: '#/components/schemas/Post'
+        '404':
+          description: Social account not found
+        '422':
+          description: Validation error
+    get:
+      tags: [Posts]
+      summary: List posts
+      security:
+        - sessionAuth: []
+      parameters:
+        - name: status
+          in: query
+          schema:
+            type: string
+            enum: [draft, scheduled, processing, published, failed, cancelled]
+        - name: page
+          in: query
+          schema:
+            type: integer
+            default: 1
+        - name: limit
+          in: query
+          schema:
+            type: integer
+            default: 20
+            maximum: 100
+      responses:
+        '200':
+          description: Paginated list of posts
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/SuccessResponse'
+                  - properties:
+                      data:
+                        type: object
+                        properties:
+                          posts:
+                            type: array
+                            items:
+                              $ref: '#/components/schemas/Post'
+                          pagination:
+                            type: object
+                            properties:
+                              page:
+                                type: integer
+                              limit:
+                                type: integer
+                              total:
+                                type: integer
+                              totalPages:
+                                type: integer
+
+  /api/posts/{id}:
+    get:
+      tags: [Posts]
+      summary: Get a post
+      security:
+        - sessionAuth: []
+      parameters:
+        - $ref: '#/components/parameters/PostId'
+      responses:
+        '200':
+          description: Post with publishing logs
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/SuccessResponse'
+                  - properties:
+                      data:
+                        type: object
+                        properties:
+                          post:
+                            allOf:
+                              - $ref: '#/components/schemas/Post'
+                              - properties:
+                                  publishingLogs:
+                                    type: array
+                                    items:
+                                      $ref: '#/components/schemas/PublishingLog'
+        '404':
+          description: Post not found
+    put:
+      tags: [Posts]
+      summary: Update a post
+      description: Only posts with status `draft` or `scheduled` can be updated.
+      security:
+        - sessionAuth: []
+      parameters:
+        - $ref: '#/components/parameters/PostId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                socialAccountId:
+                  type: string
+                  format: uuid
+                caption:
+                  type: string
+                  maxLength: 2200
+                mediaType:
+                  type: string
+                  enum: [IMAGE, VIDEO]
+                mediaUrl:
+                  type: string
+                  format: uri
+                scheduledAt:
+                  type: string
+                  format: date-time
+                  nullable: true
+      responses:
+        '200':
+          description: Post updated
+        '400':
+          description: Cannot edit post in current status
+        '404':
+          description: Post not found
+    delete:
+      tags: [Posts]
+      summary: Delete a post
+      description: Cannot delete posts in `processing` status.
+      security:
+        - sessionAuth: []
+      parameters:
+        - $ref: '#/components/parameters/PostId'
+      responses:
+        '200':
+          description: Post deleted
+        '400':
+          description: Cannot delete post in current status
+        '404':
+          description: Post not found
+
+  /api/posts/{id}/publish:
+    post:
+      tags: [Posts]
+      summary: Publish a post immediately
+      description: |
+        Publishes a post via the Instagram Content Publishing API.
+        Only posts with status `draft`, `scheduled`, or `failed` can be published.
+        Uses transactional locking to prevent duplicate publishing.
+      security:
+        - sessionAuth: []
+      parameters:
+        - $ref: '#/components/parameters/PostId'
+      responses:
+        '200':
+          description: Post published successfully
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/SuccessResponse'
+                  - properties:
+                      data:
+                        type: object
+                        properties:
+                          post:
+                            $ref: '#/components/schemas/Post'
+        '400':
+          description: Post already published or processing
+        '404':
+          description: Post not found
+
+  /api/posts/{id}/status:
+    get:
+      tags: [Posts]
+      summary: Get post publishing status
+      security:
+        - sessionAuth: []
+      parameters:
+        - $ref: '#/components/parameters/PostId'
+      responses:
+        '200':
+          description: Post status with recent logs
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/SuccessResponse'
+                  - properties:
+                      data:
+                        type: object
+                        properties:
+                          status:
+                            type: object
+                            properties:
+                              id:
+                                type: string
+                              status:
+                                type: string
+                              publishedAt:
+                                type: string
+                                format: date-time
+                                nullable: true
+                              platformPostId:
+                                type: string
+                                nullable: true
+                              errorMessage:
+                                type: string
+                                nullable: true
+                              scheduledAt:
+                                type: string
+                                format: date-time
+                                nullable: true
+                              publishingLogs:
+                                type: array
+                                items:
+                                  $ref: '#/components/schemas/PublishingLog'
+
+  # ── Dashboard ────────────────────────────────────────────────
+  /api/dashboard/overview:
+    get:
+      tags: [Dashboard]
+      summary: Get dashboard overview
+      description: Returns aggregated statistics and recent/upcoming posts for the authenticated user.
+      security:
+        - sessionAuth: []
+      responses:
+        '200':
+          description: Dashboard overview
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/SuccessResponse'
+                  - properties:
+                      data:
+                        type: object
+                        properties:
+                          overview:
+                            $ref: '#/components/schemas/DashboardOverview'
+        '401':
+          description: Not authenticated

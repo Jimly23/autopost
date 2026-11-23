@@ -1,0 +1,103 @@
+// Prisma schema for Automation social media platform
+
+generator client {
+  provider = "prisma-client"
+  output   = "../generated/client"
+}
+
+datasource db {
+  provider = "mysql"
+}
+
+model User {
+  id            String          @id @default(uuid())
+  name          String          @db.VarChar(255)
+  email         String          @unique @db.VarChar(255)
+  passwordHash  String          @map("password_hash") @db.VarChar(255)
+  createdAt     DateTime        @default(now()) @map("created_at")
+  updatedAt     DateTime        @updatedAt @map("updated_at")
+
+  socialAccounts SocialAccount[]
+  posts          Post[]
+
+  @@map("users")
+}
+
+model SocialAccount {
+  id              String       @id @default(uuid())
+  userId          String       @map("user_id")
+  platform        String       @default("instagram") @db.VarChar(50)
+  platformUserId  String       @map("platform_user_id") @db.VarChar(255)
+  username        String       @db.VarChar(255)
+  accountType     String?      @map("account_type") @db.VarChar(50)
+  profilePicture  String?      @map("profile_picture") @db.Text
+
+  createdAt       DateTime     @default(now()) @map("created_at")
+  updatedAt       DateTime     @updatedAt @map("updated_at")
+
+  user            User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  token           SocialToken?
+  posts           Post[]
+
+  @@unique([platform, platformUserId], name: "platform_account_unique")
+  @@index([userId])
+  @@map("social_accounts")
+}
+
+model SocialToken {
+  id              String        @id @default(uuid())
+  socialAccountId String        @unique @map("social_account_id")
+  accessToken     String        @map("access_token") @db.Text
+  tokenType       String        @default("bearer") @map("token_type") @db.VarChar(50)
+  expiresAt       DateTime?     @map("expires_at")
+  scopes          String?       @db.Text
+
+  createdAt       DateTime      @default(now()) @map("created_at")
+  updatedAt       DateTime      @updatedAt @map("updated_at")
+
+  socialAccount   SocialAccount @relation(fields: [socialAccountId], references: [id], onDelete: Cascade)
+
+  @@map("social_tokens")
+}
+
+model Post {
+  id              String          @id @default(uuid())
+  userId          String          @map("user_id")
+  socialAccountId String          @map("social_account_id")
+  caption         String?         @db.Text
+  mediaType       String          @map("media_type") @db.VarChar(20)
+  mediaUrl        String          @map("media_url") @db.Text
+  scheduledAt     DateTime?       @map("scheduled_at")
+  publishedAt     DateTime?       @map("published_at")
+  status          String          @default("draft") @db.VarChar(20)
+  platformPostId  String?         @map("platform_post_id") @db.VarChar(255)
+  errorMessage    String?         @map("error_message") @db.Text
+
+  createdAt       DateTime        @default(now()) @map("created_at")
+  updatedAt       DateTime        @updatedAt @map("updated_at")
+
+  user            User            @relation(fields: [userId], references: [id], onDelete: Cascade)
+  socialAccount   SocialAccount   @relation(fields: [socialAccountId], references: [id], onDelete: Cascade)
+  publishingLogs  PublishingLog[]
+
+  @@index([userId])
+  @@index([socialAccountId])
+  @@index([status, scheduledAt])
+  @@map("posts")
+}
+
+model PublishingLog {
+  id            String    @id @default(uuid())
+  postId        String    @map("post_id")
+  action        String    @db.VarChar(100)
+  status        String    @db.VarChar(50)
+  responseData  String?   @map("response_data") @db.Text
+  errorMessage  String?   @map("error_message") @db.Text
+
+  createdAt     DateTime  @default(now()) @map("created_at")
+
+  post          Post      @relation(fields: [postId], references: [id], onDelete: Cascade)
+
+  @@index([postId])
+  @@map("publishing_logs")
+}
