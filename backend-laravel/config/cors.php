@@ -16,10 +16,12 @@ return [
         env('FRONTEND_URL', 'http://localhost:5173'),
         'http://localhost:5173',
         'http://127.0.0.1:5173',
+        'https://automation-social.netlify.app',
     ]),
 
     'allowed_origins_patterns' => [
         '#^https?://.*\.ngrok-free\.app$#',
+        '#^https?://.*\.netlify\.app$#',
     ],
 
     'allowed_headers' => ['*'],

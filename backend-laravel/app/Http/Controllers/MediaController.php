@@ -79,31 +79,62 @@ class MediaController extends Controller
 
         $uploadPath = public_path('uploads');
         if (!File::exists($uploadPath)) {
-            File::makeDirectory($uploadPath, 0755, true);
+            try {
+                File::makeDirectory($uploadPath, 0775, true, true);
+            } catch (\Throwable $e) {
+                return ApiResponse::error(
+                    'Upload directory could not be created. Please check folder permissions for public/uploads on VPS.',
+                    500
+                );
+            }
+        }
+
+        if (!is_writable($uploadPath)) {
+            return ApiResponse::error(
+                'Upload directory is not writable. Please ensure the web server user (e.g. www-data) has write permission on public/uploads.',
+                500
+            );
         }
 
         $timestamp = (int) (microtime(true) * 1000);
         $randomHex = bin2hex(random_bytes(6));
 
-        if ($isVideo) {
-            // Videos are stored as-is; Meta only accepts MP4/MOV with the right codecs.
-            $extension = $mimeType === 'video/quicktime' ? 'mov' : 'mp4';
-            $filename = "{$timestamp}-{$randomHex}.{$extension}";
-            $file->move($uploadPath, $filename);
-            $finalMime = $mimeType;
-        } else {
-            // Instagram only accepts JPEG, so every image is normalised to .jpg.
-            $filename = "{$timestamp}-{$randomHex}.jpg";
-            $destination = "{$uploadPath}/{$filename}";
+        try {
+            if ($isVideo) {
+                // Videos are stored as-is; Meta only accepts MP4/MOV with the right codecs.
+                $extension = $mimeType === 'video/quicktime' ? 'mov' : 'mp4';
+                $filename = "{$timestamp}-{$randomHex}.{$extension}";
+                $file->move($uploadPath, $filename);
+                $finalMime = $mimeType;
+            } else {
+                $origExt = strtolower($file->getClientOriginalExtension());
+                $allowedImageExts = ['jpg', 'jpeg', 'png', 'webp'];
+                $extension = in_array($origExt, $allowedImageExts, true) ? $origExt : 'jpg';
 
-            if (!$this->convertImageToJpeg($file->getRealPath(), $destination)) {
-                return ApiResponse::error(
-                    'The image could not be processed. Use a valid JPG, PNG, or WEBP file.',
-                    422
-                );
+                $converted = false;
+                $filename = "{$timestamp}-{$randomHex}.jpg";
+                $destination = "{$uploadPath}/{$filename}";
+
+                // Attempt JPEG conversion if GD extension is available
+                if (extension_loaded('gd') && function_exists('imagecreatefromstring')) {
+                    try {
+                        $converted = $this->convertImageToJpeg($file->getRealPath(), $destination);
+                    } catch (\Throwable $t) {
+                        $converted = false;
+                    }
+                }
+
+                // If conversion was skipped or failed, fallback to storing as-is (matching Express behavior)
+                if (!$converted) {
+                    $filename = "{$timestamp}-{$randomHex}.{$extension}";
+                    $file->move($uploadPath, $filename);
+                    $finalMime = $mimeType;
+                } else {
+                    $finalMime = 'image/jpeg';
+                }
             }
-
-            $finalMime = 'image/jpeg';
+        } catch (\Throwable $e) {
+            return ApiResponse::error('Failed to save file: ' . $e->getMessage(), 500);
         }
 
         $backendUrl = env('BACKEND_URL');
