@@ -30,9 +30,11 @@ export const App: React.FC = () => {
       <ToastProvider>
         <AuthProvider>
           <Routes>
-            {/* Public Legal Pages */}
+            {/* Public Legal Pages (Meta, Google, TikTok Compliance) */}
             <Route path="/privacy" element={<PrivacyPolicy />} />
+            <Route path="/privacy-policy" element={<PrivacyPolicy />} />
             <Route path="/terms" element={<TermsOfService />} />
+            <Route path="/terms-of-service" element={<TermsOfService />} />
 
             {/* Public Auth Routes */}
             <Route element={<PublicRoute />}>
