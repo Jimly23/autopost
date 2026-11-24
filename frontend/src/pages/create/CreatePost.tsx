@@ -340,11 +340,11 @@ export const CreatePost: React.FC = () => {
               <CardTitle className="flex items-center gap-2">
                 <span>Post Composer</span>
                 {isYouTube ? (
-                  <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-xs font-semibold bg-red-100 text-red-700">
+                  <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-xs font-semibold bg-red-100 dark:bg-red-500/10 text-red-700 dark:text-red-400 border border-red-200/50 dark:border-red-500/20">
                     <Youtube className="w-3.5 h-3.5" /> YouTube
                   </span>
                 ) : (
-                  <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-xs font-semibold bg-pink-100 text-pink-700">
+                  <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-xs font-semibold bg-pink-100 dark:bg-pink-500/10 text-pink-700 dark:text-pink-400 border border-pink-200/50 dark:border-pink-500/20">
                     <Instagram className="w-3.5 h-3.5" /> Instagram
                   </span>
                 )}
@@ -358,13 +358,13 @@ export const CreatePost: React.FC = () => {
             <CardContent className="space-y-4">
               {/* Target Account */}
               <div>
-                <label className="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1.5">
+                <label className="block text-xs font-semibold text-slate-700 dark:text-zinc-300 uppercase tracking-wider mb-1.5">
                   Target Akun Media Sosial
                 </label>
                 {fetchingAccounts ? (
-                  <div className="h-10 bg-slate-100 rounded-lg animate-pulse" />
+                  <div className="h-10 bg-slate-100 dark:bg-white/[0.05] rounded-lg animate-pulse" />
                 ) : accounts.length === 0 ? (
-                  <div className="p-3 bg-rose-50 border border-rose-200 rounded-lg text-xs text-rose-700 flex items-center justify-between">
+                  <div className="p-3 bg-rose-50 dark:bg-rose-500/10 border border-rose-200 dark:border-rose-500/20 rounded-lg text-xs text-rose-700 dark:text-rose-400 flex items-center justify-between">
                     <span>Belum ada akun sosial yang terhubung.</span>
                     <Button variant="outline" size="sm" onClick={() => navigate('/accounts')}>
                       Hubungkan Akun
@@ -386,14 +386,14 @@ export const CreatePost: React.FC = () => {
 
               {/* YouTube Specific Fields */}
               {isYouTube && (
-                <div className="space-y-4 p-4 bg-red-50/40 rounded-xl border border-red-100">
+                <div className="space-y-4 p-4 bg-red-50/40 dark:bg-red-500/5 rounded-xl border border-red-100 dark:border-red-500/10">
                   {/* Title */}
                   <div>
                     <div className="flex items-center justify-between mb-1.5">
-                      <label className="block text-xs font-semibold text-slate-800 uppercase tracking-wider">
+                      <label className="block text-xs font-semibold text-slate-800 dark:text-zinc-200 uppercase tracking-wider">
                         Judul Video YouTube *
                       </label>
-                      <span className={`text-[11px] font-mono ${title.length > 100 ? 'text-rose-600 font-bold' : 'text-slate-500'}`}>
+                      <span className={`text-[11px] font-mono ${title.length > 100 ? 'text-rose-600 font-bold' : 'text-slate-500 dark:text-zinc-400'}`}>
                         {title.length} / 100
                       </span>
                     </div>
@@ -407,12 +407,12 @@ export const CreatePost: React.FC = () => {
                   </div>
 
                   {/* Shorts Toggle */}
-                  <div className="flex items-center justify-between p-3 bg-white rounded-lg border border-red-100">
+                  <div className="flex items-center justify-between p-3 bg-white dark:bg-[#161722] rounded-lg border border-red-100 dark:border-red-500/20">
                     <div>
-                      <span className="text-xs font-semibold text-slate-800 flex items-center gap-1.5">
-                        <Film className="w-4 h-4 text-red-600" /> Publikasikan sebagai YouTube Shorts
+                      <span className="text-xs font-semibold text-slate-800 dark:text-zinc-200 flex items-center gap-1.5">
+                        <Film className="w-4 h-4 text-red-600 dark:text-red-400" /> Publikasikan sebagai YouTube Shorts
                       </span>
-                      <p className="text-[11px] text-slate-500 mt-0.5">
+                      <p className="text-[11px] text-slate-500 dark:text-zinc-400 mt-0.5">
                         Video vertikal 9:16 (durasi ≤ 60 detik). Tag #Shorts akan otomatis ditambahkan ke deskripsi.
                       </p>
                     </div>
@@ -423,13 +423,13 @@ export const CreatePost: React.FC = () => {
                         setIsShorts(e.target.checked);
                         setMediaType(e.target.checked ? 'SHORTS' : 'VIDEO');
                       }}
-                      className="w-4 h-4 rounded border-slate-300 text-red-600 focus:ring-red-500 cursor-pointer"
+                      className="w-4 h-4 rounded border-slate-300 dark:border-white/20 text-red-600 focus:ring-red-500 cursor-pointer"
                     />
                   </div>
 
                   {/* Privacy Status */}
                   <div>
-                    <label className="block text-xs font-semibold text-slate-800 uppercase tracking-wider mb-1.5">
+                    <label className="block text-xs font-semibold text-slate-800 dark:text-zinc-200 uppercase tracking-wider mb-1.5">
                       Status Privasi Video
                     </label>
                     <Select
@@ -448,10 +448,10 @@ export const CreatePost: React.FC = () => {
               {/* Direct Media File Upload Zone */}
               <div>
                 <div className="flex items-center justify-between mb-1.5">
-                  <label className="block text-xs font-semibold text-slate-700 uppercase tracking-wider">
+                  <label className="block text-xs font-semibold text-slate-700 dark:text-zinc-300 uppercase tracking-wider">
                     {isYouTube ? 'File Video (MP4 / MOV)' : 'File Media (Foto / Video)'}
                   </label>
-                  <span className="text-[11px] font-medium text-slate-400">
+                  <span className="text-[11px] font-medium text-slate-400 dark:text-zinc-500">
                     {isYouTube
                       ? 'Format MP4, MOV (maks. 100MB)'
                       : 'JPG, PNG, WEBP (maks. 25MB) • MP4, MOV (maks. 38MB)'}
@@ -476,18 +476,18 @@ export const CreatePost: React.FC = () => {
                     onClick={() => fileInputRef.current?.click()}
                     className={`border-2 border-dashed rounded-xl p-6 text-center cursor-pointer transition-all flex flex-col items-center justify-center gap-3 ${
                       isDragging
-                        ? 'border-blue-500 bg-blue-50/50'
-                        : 'border-slate-300 hover:border-blue-400 hover:bg-slate-50/80 bg-slate-50/40'
+                        ? 'border-blue-500 bg-blue-50/50 dark:bg-blue-500/10'
+                        : 'border-slate-300 dark:border-white/10 hover:border-blue-400 dark:hover:border-blue-500/50 hover:bg-slate-50/80 dark:hover:bg-white/[0.04] bg-slate-50/40 dark:bg-white/[0.02]'
                     }`}
                   >
-                    <div className="w-12 h-12 rounded-full bg-blue-50 border border-blue-100 flex items-center justify-center text-blue-600">
+                    <div className="w-12 h-12 rounded-full bg-blue-50 dark:bg-blue-500/10 border border-blue-100 dark:border-blue-500/20 flex items-center justify-center text-blue-600 dark:text-blue-400">
                       <UploadCloud className="w-6 h-6" />
                     </div>
                     <div>
-                      <p className="text-sm font-semibold text-slate-800">
+                      <p className="text-sm font-semibold text-slate-800 dark:text-white">
                         Klik untuk memilih file atau seret file ke sini
                       </p>
-                      <p className="text-xs text-slate-500 mt-1">
+                      <p className="text-xs text-slate-500 dark:text-zinc-400 mt-1">
                         {isYouTube
                           ? 'Pilih video MP4 atau Shorts dari komputer Anda'
                           : 'Foto single image atau Video Reels dari komputer Anda'}
@@ -496,17 +496,17 @@ export const CreatePost: React.FC = () => {
                   </div>
                 ) : (
                   /* Selected File Box */
-                  <div className="p-3.5 bg-slate-50 rounded-xl border border-slate-200 space-y-3">
+                  <div className="p-3.5 bg-slate-50 dark:bg-white/[0.03] rounded-xl border border-slate-200 dark:border-white/[0.08] space-y-3">
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-2.5 min-w-0">
-                        <div className="w-9 h-9 rounded-lg bg-blue-100 text-blue-600 flex items-center justify-center shrink-0">
+                        <div className="w-9 h-9 rounded-lg bg-blue-100 dark:bg-blue-500/15 text-blue-600 dark:text-blue-400 flex items-center justify-center shrink-0">
                           {mediaType === 'IMAGE' ? <ImageIcon className="w-5 h-5" /> : <Video className="w-5 h-5" />}
                         </div>
                         <div className="min-w-0">
-                          <p className="text-xs font-semibold text-slate-800 truncate">
+                          <p className="text-xs font-semibold text-slate-800 dark:text-white truncate">
                             {selectedFile ? selectedFile.name : mediaUrl.split('/').pop()}
                           </p>
-                          <p className="text-[11px] text-slate-400">
+                          <p className="text-[11px] text-slate-400 dark:text-zinc-500">
                             {selectedFile ? `${(selectedFile.size / (1024 * 1024)).toFixed(2)} MB • ` : ''}
                             Tipe: {mediaType}
                           </p>
@@ -520,7 +520,7 @@ export const CreatePost: React.FC = () => {
                           size="sm"
                           onClick={() => fileInputRef.current?.click()}
                           title="Ganti file"
-                          className="text-xs text-slate-600 hover:text-blue-600"
+                          className="text-xs text-slate-600 dark:text-zinc-300 hover:text-blue-600 dark:hover:text-blue-400"
                         >
                           <RefreshCw className="w-3.5 h-3.5 mr-1" /> Ganti
                         </Button>
@@ -530,7 +530,7 @@ export const CreatePost: React.FC = () => {
                           size="sm"
                           onClick={handleRemoveFile}
                           title="Hapus file"
-                          className="text-xs text-rose-600 hover:text-rose-700 hover:bg-rose-50"
+                          className="text-xs text-rose-600 dark:text-rose-400 hover:text-rose-700 dark:hover:text-rose-300 hover:bg-rose-50 dark:hover:bg-rose-500/10"
                         >
                           <Trash2 className="w-3.5 h-3.5" />
                         </Button>
@@ -539,12 +539,12 @@ export const CreatePost: React.FC = () => {
 
                     {/* Upload progress or ready indicator */}
                     {isUploading ? (
-                      <div className="flex items-center gap-2 text-xs text-blue-600 bg-blue-50 border border-blue-200/80 p-2.5 rounded-lg">
+                      <div className="flex items-center gap-2 text-xs text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-500/10 border border-blue-200/80 dark:border-blue-500/20 p-2.5 rounded-lg">
                         <Loader2 className="w-4 h-4 animate-spin shrink-0" />
                         <span>Mengunggah file media ke server...</span>
                       </div>
                     ) : uploadError ? (
-                      <div className="flex items-center justify-between gap-2 text-xs text-rose-700 bg-rose-50 border border-rose-200 p-2.5 rounded-lg">
+                      <div className="flex items-center justify-between gap-2 text-xs text-rose-700 dark:text-rose-400 bg-rose-50 dark:bg-rose-500/10 border border-rose-200 dark:border-rose-500/20 p-2.5 rounded-lg">
                         <div className="flex items-center gap-2">
                           <AlertCircle className="w-4 h-4 shrink-0" />
                           <span>{uploadError}</span>
@@ -553,15 +553,15 @@ export const CreatePost: React.FC = () => {
                           <button
                             type="button"
                             onClick={() => handleProcessFile(selectedFile)}
-                            className="text-xs font-semibold underline text-rose-800 hover:text-rose-900"
+                            className="text-xs font-semibold underline text-rose-800 dark:text-rose-300 hover:text-rose-900"
                           >
                             Coba Lagi
                           </button>
                         )}
                       </div>
                     ) : mediaUrl ? (
-                      <div className="flex items-center gap-2 text-xs text-emerald-700 bg-emerald-50 border border-emerald-200 p-2 rounded-lg">
-                        <FileCheck2 className="w-4 h-4 shrink-0 text-emerald-600" />
+                      <div className="flex items-center gap-2 text-xs text-emerald-700 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-500/10 border border-emerald-200 dark:border-emerald-500/20 p-2 rounded-lg">
+                        <FileCheck2 className="w-4 h-4 shrink-0 text-emerald-600 dark:text-emerald-400" />
                         <span>
                           {isYouTube
                             ? 'Video tersimpan & siap diunggah ke YouTube Channel'
@@ -576,10 +576,10 @@ export const CreatePost: React.FC = () => {
               {/* Caption / Description Textarea */}
               <div>
                 <div className="flex items-center justify-between mb-1.5">
-                  <label className="block text-xs font-semibold text-slate-700 uppercase tracking-wider">
+                  <label className="block text-xs font-semibold text-slate-700 dark:text-zinc-300 uppercase tracking-wider">
                     {isYouTube ? 'Deskripsi Video (Description)' : 'Caption'}
                   </label>
-                  <span className={`text-[11px] font-mono ${caption.length > (isYouTube ? 5000 : 2200) ? 'text-rose-600 font-bold' : 'text-slate-400'}`}>
+                  <span className={`text-[11px] font-mono ${caption.length > (isYouTube ? 5000 : 2200) ? 'text-rose-600 font-bold' : 'text-slate-400 dark:text-zinc-500'}`}>
                     {caption.length} / {isYouTube ? 5000 : 2200}
                   </span>
                 </div>
@@ -592,26 +592,26 @@ export const CreatePost: React.FC = () => {
                       ? 'Tulis deskripsi video YouTube, sertakan link, informasi konten, dan hashtag #Shorts jika ingin dibuat shorts...'
                       : 'Tulis caption menarik, sertakan hashtag #automation #marketing...'
                   }
-                  className="w-full bg-white rounded-lg border border-slate-300 p-3 text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all shadow-sm resize-none"
+                  className="w-full bg-white dark:bg-[#12131a] rounded-xl border border-slate-300 dark:border-white/[0.08] p-3 text-sm text-slate-900 dark:text-white placeholder:text-slate-400 dark:placeholder:text-zinc-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all shadow-sm resize-none"
                 />
               </div>
 
               {/* Scheduling Options */}
-              <div className="pt-2 border-t border-slate-100">
+              <div className="pt-2 border-t border-slate-100 dark:border-white/[0.06]">
                 <label className="flex items-center gap-2 cursor-pointer select-none">
                   <input
                     type="checkbox"
                     checked={isScheduled}
                     onChange={(e) => setIsScheduled(e.target.checked)}
-                    className="w-4 h-4 rounded border-slate-300 text-blue-600 focus:ring-blue-500"
+                    className="w-4 h-4 rounded border-slate-300 dark:border-white/20 text-blue-600 focus:ring-blue-500"
                   />
-                  <span className="text-xs font-semibold text-slate-800">
+                  <span className="text-xs font-semibold text-slate-800 dark:text-zinc-200">
                     Jadwalkan untuk publikasi otomatis nanti
                   </span>
                 </label>
 
                 {isScheduled && (
-                  <div className="grid grid-cols-2 gap-3 mt-3 p-3.5 bg-slate-50 rounded-xl border border-slate-200/80 animate-in fade-in duration-150">
+                  <div className="grid grid-cols-2 gap-3 mt-3 p-3.5 bg-slate-50 dark:bg-white/[0.03] rounded-xl border border-slate-200/80 dark:border-white/[0.08] animate-in fade-in duration-150">
                     <Input
                       label="Tanggal"
                       type="date"
@@ -672,13 +672,13 @@ export const CreatePost: React.FC = () => {
 
         {/* Right: Mockup Preview (5 cols) */}
         <div className="lg:col-span-5 space-y-3 sticky top-20">
-          <div className="text-xs font-semibold uppercase tracking-wider text-slate-400">
+          <div className="text-xs font-semibold uppercase tracking-wider text-slate-400 dark:text-zinc-500">
             {isYouTube ? 'YouTube Player Mockup Preview' : 'Instagram Feed Mockup Preview'}
           </div>
 
           {isYouTube ? (
             /* YouTube Mockup Preview */
-            <div className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden max-w-sm mx-auto">
+            <div className="bg-white dark:bg-[#12131a] rounded-2xl border border-slate-200 dark:border-white/[0.08] shadow-sm overflow-hidden max-w-sm mx-auto">
               {/* Video Player Box */}
               <div className={`${isShorts ? 'aspect-[9/16]' : 'aspect-video'} bg-black flex items-center justify-center overflow-hidden relative`}>
                 {localPreviewUrl ? (
@@ -701,34 +701,34 @@ export const CreatePost: React.FC = () => {
               {/* YouTube Video Info */}
               <div className="p-4 space-y-3">
                 <div className="flex items-start justify-between gap-2">
-                  <h3 className="text-sm font-bold text-slate-900 line-clamp-2">
+                  <h3 className="text-sm font-bold text-slate-900 dark:text-white line-clamp-2">
                     {title || '(Judul Video YouTube Anda)'}
                   </h3>
-                  <span className="px-2 py-0.5 rounded text-[10px] font-semibold bg-red-100 text-red-700 uppercase shrink-0">
+                  <span className="px-2 py-0.5 rounded text-[10px] font-semibold bg-red-100 dark:bg-red-500/10 text-red-700 dark:text-red-400 border border-red-200/50 dark:border-red-500/20 uppercase shrink-0">
                     {privacyStatus}
                   </span>
                 </div>
 
-                <div className="flex items-center gap-2.5 pt-1 border-t border-slate-100">
-                  <div className="w-8 h-8 rounded-full bg-red-100 text-red-600 flex items-center justify-center shrink-0">
+                <div className="flex items-center gap-2.5 pt-1 border-t border-slate-100 dark:border-white/[0.06]">
+                  <div className="w-8 h-8 rounded-full bg-red-100 dark:bg-red-500/10 text-red-600 dark:text-red-400 flex items-center justify-center shrink-0">
                     <Youtube className="w-4 h-4" />
                   </div>
                   <div className="min-w-0">
-                    <p className="text-xs font-bold text-slate-900 truncate">
+                    <p className="text-xs font-bold text-slate-900 dark:text-white truncate">
                       {selectedAccount?.username || 'YouTube Channel'}
                     </p>
-                    <p className="text-[10px] text-slate-400">
+                    <p className="text-[10px] text-slate-400 dark:text-zinc-500">
                       {isShorts ? 'YouTube Shorts' : 'Standard Video'}
                     </p>
                   </div>
                 </div>
 
-                <div className="p-2.5 bg-slate-50 rounded-lg text-xs text-slate-600 whitespace-pre-wrap break-words max-h-32 overflow-y-auto">
+                <div className="p-2.5 bg-slate-50 dark:bg-white/[0.04] rounded-lg text-xs text-slate-600 dark:text-zinc-300 border border-transparent dark:border-white/[0.04] whitespace-pre-wrap break-words max-h-32 overflow-y-auto">
                   {caption || '(Deskripsi video akan tampil di sini)'}
                 </div>
 
                 {isScheduled && (
-                  <div className="pt-2 border-t border-slate-100 flex items-center gap-1.5 text-[11px] text-red-600 font-medium">
+                  <div className="pt-2 border-t border-slate-100 dark:border-white/[0.06] flex items-center gap-1.5 text-[11px] text-red-600 dark:text-red-400 font-medium">
                     <Clock className="w-3.5 h-3.5" />
                     <span>Jadwal: {scheduledDate || 'Tanggal'} jam {scheduledTime || 'Waktu'}</span>
                   </div>
@@ -737,22 +737,22 @@ export const CreatePost: React.FC = () => {
             </div>
           ) : (
             /* Instagram Mockup Preview */
-            <div className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden max-w-sm mx-auto">
-              <div className="p-3.5 flex items-center justify-between border-b border-slate-100">
+            <div className="bg-white dark:bg-[#12131a] rounded-2xl border border-slate-200 dark:border-white/[0.08] shadow-sm overflow-hidden max-w-sm mx-auto">
+              <div className="p-3.5 flex items-center justify-between border-b border-slate-100 dark:border-white/[0.06]">
                 <div className="flex items-center gap-2.5">
                   <div className="w-7 h-7 rounded-full bg-gradient-to-tr from-amber-400 via-pink-500 to-purple-600 p-[1.5px]">
-                    <div className="w-full h-full bg-white rounded-full p-[1px] flex items-center justify-center">
-                      <Instagram className="w-3.5 h-3.5 text-slate-700" />
+                    <div className="w-full h-full bg-white dark:bg-[#12131a] rounded-full p-[1px] flex items-center justify-center">
+                      <Instagram className="w-3.5 h-3.5 text-slate-700 dark:text-zinc-300" />
                     </div>
                   </div>
-                  <span className="text-xs font-bold text-slate-900 truncate">
+                  <span className="text-xs font-bold text-slate-900 dark:text-white truncate">
                     {selectedAccount?.username || 'akun_instagram'}
                   </span>
                 </div>
-                <span className="text-slate-400 text-xs">•••</span>
+                <span className="text-slate-400 dark:text-zinc-500 text-xs">•••</span>
               </div>
 
-              <div className="aspect-square bg-slate-100 flex items-center justify-center overflow-hidden relative">
+              <div className="aspect-square bg-slate-100 dark:bg-black/40 flex items-center justify-center overflow-hidden relative">
                 {localPreviewUrl ? (
                   mediaType === 'IMAGE' ? (
                     <img
@@ -774,7 +774,7 @@ export const CreatePost: React.FC = () => {
                     />
                   )
                 ) : (
-                  <div className="flex flex-col items-center gap-2 text-slate-400 p-6 text-center">
+                  <div className="flex flex-col items-center gap-2 text-slate-400 dark:text-zinc-500 p-6 text-center">
                     <ImageIcon className="w-8 h-8 opacity-40" />
                     <span className="text-xs font-medium">
                       Pilih file foto atau video untuk melihat preview
@@ -784,19 +784,19 @@ export const CreatePost: React.FC = () => {
               </div>
 
               <div className="p-3.5 space-y-2">
-                <div className="flex items-center gap-3 text-slate-700">
+                <div className="flex items-center gap-3 text-slate-700 dark:text-zinc-400">
                   <span className="text-sm font-bold">♥</span>
                   <span className="text-sm">💬</span>
                   <span className="text-sm">↗</span>
                 </div>
-                <p className="text-xs text-slate-800 leading-relaxed whitespace-pre-wrap break-words">
-                  <span className="font-bold mr-1.5">
+                <p className="text-xs text-slate-800 dark:text-zinc-200 leading-relaxed whitespace-pre-wrap break-words">
+                  <span className="font-bold mr-1.5 text-slate-900 dark:text-white">
                     {selectedAccount?.username || 'akun_instagram'}
                   </span>
                   {caption || '(Caption postingan akan tampil di sini)'}
                 </p>
                 {isScheduled && (
-                  <div className="pt-2 border-t border-slate-100 flex items-center gap-1.5 text-[11px] text-blue-600 font-medium">
+                  <div className="pt-2 border-t border-slate-100 dark:border-white/[0.06] flex items-center gap-1.5 text-[11px] text-blue-600 dark:text-blue-400 font-medium">
                     <Clock className="w-3.5 h-3.5" />
                     <span>Jadwal: {scheduledDate || 'Tanggal'} jam {scheduledTime || 'Waktu'}</span>
                   </div>
