@@ -1,4 +1,5 @@
 *.txt
+!frontend/public/*.txt
 .env
 .env.*
 !.env.example
