@@ -1,12 +1,12 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { FileText, ArrowLeft, ShieldCheck, CheckCircle2, AlertCircle } from 'lucide-react';
+import { FileText, ArrowLeft, ShieldCheck, CheckCircle2, AlertCircle, ExternalLink } from 'lucide-react';
 
 export const TermsOfService: React.FC = () => {
-  const lastUpdated = 'November 21, 2026';
+  const lastUpdated = 'November 24, 2026';
 
   return (
-    <div className="min-h-screen bg-slate-50 text-slate-800">
+    <div className="min-h-screen bg-slate-50 text-slate-800 font-sans antialiased">
       {/* Top Navbar */}
       <header className="sticky top-0 z-10 border-b border-slate-200 bg-white/80 backdrop-blur-md">
         <div className="mx-auto flex max-w-5xl items-center justify-between px-6 py-4">
@@ -53,7 +53,7 @@ export const TermsOfService: React.FC = () => {
               Agreement to Terms
             </h2>
             <p>
-              By accessing or using the <strong>Automation</strong> social media management platform, you agree to be bound by these Terms of Service. If you do not agree to these terms, you may not access or use the platform.
+              By accessing, browsing, or creating an account on the <strong>Automation</strong> social media management software platform, you agree to comply with and be legally bound by these Terms of Service. If you do not agree to these terms in full, you may not use our services.
             </p>
           </section>
 
@@ -64,45 +64,119 @@ export const TermsOfService: React.FC = () => {
               Description of Service
             </h2>
             <p>
-              Automation provides tools for scheduling, managing, and publishing content to supported social media accounts (including Instagram Professional accounts via official Meta Graph API endpoints).
+              Automation provides an automated content scheduling, planning, and publishing platform connecting creators and businesses with third-party social media platforms, including:
             </p>
+            <ul className="mt-3 list-disc pl-5 space-y-1.5 text-sm">
+              <li><strong>Meta Platforms (Instagram Business):</strong> Publishing photos, carousel albums, and Instagram Reels via the official Meta Graph API.</li>
+              <li><strong>YouTube (Google LLC):</strong> Uploading standard videos and YouTube Shorts via the official YouTube Data API v3.</li>
+              <li><strong>TikTok:</strong> Scheduling and publishing short-form video content via the official TikTok Content Posting API.</li>
+            </ul>
           </section>
 
           {/* Section 3 */}
           <section>
             <h2 className="text-xl font-bold text-slate-900 mb-3 flex items-center gap-2">
               <span className="flex h-7 w-7 items-center justify-center rounded-md bg-blue-100 text-blue-700 text-sm font-semibold">3</span>
-              Meta Platform Policy Compliance
+              Third-Party Platform Policies & Compliance
             </h2>
             <p>
-              Users must strictly adhere to the Community Guidelines and Platform Policies of Meta Platforms, Inc. and Instagram:
+              Your use of Automation is additionally contingent upon adhering to the rules, policies, and guidelines established by each connected social platform:
             </p>
-            <ul className="mt-3 list-disc pl-5 space-y-1.5 text-sm">
-              <li>You may not use Automation to publish spam, prohibited content, or violate intellectual property rights.</li>
-              <li>You must have the proper rights and licenses for all media content uploaded to the platform.</li>
-              <li>Any violation of Meta Platform Terms may result in immediate suspension of publishing capabilities.</li>
-            </ul>
+            
+            <div className="mt-4 space-y-3">
+              <div className="p-4 rounded-xl border border-slate-200 bg-slate-50/50 text-sm">
+                <h4 className="font-bold text-slate-900 flex items-center gap-2">
+                  <span className="w-2 h-2 rounded-full bg-pink-500"></span>
+                  Meta Platforms (Instagram) Compliance
+                </h4>
+                <p className="text-xs text-slate-600 mt-1">
+                  You agree to comply with the{' '}
+                  <a href="https://www.facebook.com/terms.php" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">
+                    Meta Terms of Service
+                  </a>{' '}
+                  and Instagram Community Guidelines. Prohibited content or spamming will lead to immediate service suspension.
+                </p>
+              </div>
+
+              <div className="p-4 rounded-xl border border-slate-200 bg-slate-50/50 text-sm">
+                <h4 className="font-bold text-slate-900 flex items-center gap-2">
+                  <span className="w-2 h-2 rounded-full bg-red-600"></span>
+                  YouTube (Google LLC) Compliance
+                </h4>
+                <p className="text-xs text-slate-600 mt-1">
+                  By using YouTube publishing features, you agree to be bound by the{' '}
+                  <a href="https://www.youtube.com/t/terms" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">
+                    YouTube Terms of Service
+                  </a>{' '}
+                  and YouTube Community Guidelines.
+                </p>
+              </div>
+
+              <div className="p-4 rounded-xl border border-slate-200 bg-slate-50/50 text-sm">
+                <h4 className="font-bold text-slate-900 flex items-center gap-2">
+                  <span className="w-2 h-2 rounded-full bg-slate-900"></span>
+                  TikTok Compliance
+                </h4>
+                <p className="text-xs text-slate-600 mt-1">
+                  You must comply with the{' '}
+                  <a href="https://www.tiktok.com/legal/page/row/terms-of-service/en" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">
+                    TikTok Terms of Service
+                  </a>{' '}
+                  and TikTok Community Guidelines for all video content scheduled through Automation.
+                </p>
+              </div>
+            </div>
           </section>
 
           {/* Section 4 */}
           <section>
             <h2 className="text-xl font-bold text-slate-900 mb-3 flex items-center gap-2">
               <span className="flex h-7 w-7 items-center justify-center rounded-md bg-blue-100 text-blue-700 text-sm font-semibold">4</span>
-              Account Ownership & Termination
+              User Content Ownership & Acceptable Use
             </h2>
-            <p>
-              You may terminate your account or disconnect your connected social media channels at any time through your dashboard settings. We reserve the right to suspend or terminate accounts that violate our terms or misuse system resources.
-            </p>
+            <ul className="list-disc pl-5 space-y-2 text-sm">
+              <li>
+                <strong>You Retain Ownership:</strong> You retain 100% intellectual property ownership of all videos, graphics, photos, captions, and media you upload to Automation.
+              </li>
+              <li>
+                <strong>Copyright & Authorizations:</strong> You affirm that you hold all required copyright licenses, authorizations, and consents for all media files scheduled through the system.
+              </li>
+              <li>
+                <strong>Prohibited Uses:</strong> You may not use the service to post defamatory, obscene, deceptive, copyright-infringing, or malicious content, or to execute botting/spam campaigns.
+              </li>
+            </ul>
           </section>
 
           {/* Section 5 */}
           <section>
             <h2 className="text-xl font-bold text-slate-900 mb-3 flex items-center gap-2">
               <span className="flex h-7 w-7 items-center justify-center rounded-md bg-blue-100 text-blue-700 text-sm font-semibold">5</span>
-              Contact
+              Account Termination & Access Revocation
             </h2>
-            <p>
-              For legal inquiries regarding these Terms, contact us at <strong>legal@automation.dev</strong>.
+            <p className="text-sm">
+              You are free to terminate your Automation account or disconnect any connected social channels at any time via the <strong>Social Accounts</strong> settings menu. Upon disconnection, stored authorization tokens and queued pending posts for that channel are immediately deleted.
+            </p>
+          </section>
+
+          {/* Section 6 */}
+          <section>
+            <h2 className="text-xl font-bold text-slate-900 mb-3 flex items-center gap-2">
+              <span className="flex h-7 w-7 items-center justify-center rounded-md bg-blue-100 text-blue-700 text-sm font-semibold">6</span>
+              Limitation of Liability
+            </h2>
+            <p className="text-sm">
+              Automation is provided "as is" without warranty of uninterrupted service. We are not liable for any account restrictions, rate limits, or removals enacted by Meta, Google, or TikTok on your social media channels.
+            </p>
+          </section>
+
+          {/* Section 7 */}
+          <section>
+            <h2 className="text-xl font-bold text-slate-900 mb-3 flex items-center gap-2">
+              <span className="flex h-7 w-7 items-center justify-center rounded-md bg-blue-100 text-blue-700 text-sm font-semibold">7</span>
+              Contact Us
+            </h2>
+            <p className="text-sm">
+              For questions regarding these Terms, contact our legal team at: <strong>legal@automation.bikinkafe.id</strong>.
             </p>
           </section>
         </div>

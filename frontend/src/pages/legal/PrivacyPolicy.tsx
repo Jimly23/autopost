@@ -1,12 +1,24 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Shield, Lock, Eye, Trash2, Database, Mail, ArrowLeft, CheckCircle2 } from 'lucide-react';
+import {
+  Shield,
+  Lock,
+  Eye,
+  Trash2,
+  Database,
+  Mail,
+  ArrowLeft,
+  CheckCircle2,
+  ExternalLink,
+  Layers,
+  Sparkles,
+} from 'lucide-react';
 
 export const PrivacyPolicy: React.FC = () => {
-  const lastUpdated = 'November 21, 2026';
+  const lastUpdated = 'November 24, 2026';
 
   return (
-    <div className="min-h-screen bg-slate-50 text-slate-800">
+    <div className="min-h-screen bg-slate-50 text-slate-800 font-sans antialiased">
       {/* Top Navbar */}
       <header className="sticky top-0 z-10 border-b border-slate-200 bg-white/80 backdrop-blur-md">
         <div className="mx-auto flex max-w-5xl items-center justify-between px-6 py-4">
@@ -53,10 +65,10 @@ export const PrivacyPolicy: React.FC = () => {
               Introduction
             </h2>
             <p>
-              Welcome to <strong>Automation</strong> ("we", "our", or "us"). We provide a modern Social Media Management SaaS platform that enables creators, businesses, and professionals to streamline, schedule, and publish content to authorized social media platforms, including Instagram.
+              Welcome to <strong>Automation</strong> ("we", "our", or "us"). We provide a multi-channel Social Media Management SaaS platform that enables content creators, agencies, and businesses to streamline, schedule, and publish video and visual media across authorized social media networks, including <strong>Meta (Instagram Business)</strong>, <strong>YouTube (Google LLC)</strong>, and <strong>TikTok</strong>.
             </p>
             <p className="mt-3">
-              We respect your privacy and are committed to protecting your personal data in full compliance with applicable privacy laws and Meta Platform Terms. This Privacy Policy describes how we collect, use, store, and protect your information when you use our service.
+              We respect your privacy and are committed to protecting your personal data in strict compliance with applicable global privacy laws (including GDPR and CCPA), Meta Platform Terms, Google API Services User Data Policy, and TikTok Developer Terms. This policy describes our collection, storage, usage, and protection of information when you access our service.
             </p>
           </section>
 
@@ -66,36 +78,56 @@ export const PrivacyPolicy: React.FC = () => {
               <span className="flex h-7 w-7 items-center justify-center rounded-md bg-blue-100 text-blue-700 text-sm font-semibold">2</span>
               Information We Collect
             </h2>
-            <p>We only collect information strictly necessary to provide and operate our social media publishing services:</p>
+            <p>We collect only the minimal data strictly required to deliver social media scheduling and publishing functionality:</p>
             
             <div className="mt-4 grid gap-4 sm:grid-cols-2">
               <div className="rounded-xl border border-slate-100 bg-slate-50/70 p-4">
                 <h3 className="font-semibold text-slate-900 flex items-center gap-2 text-sm">
                   <Database className="h-4 w-4 text-blue-600" />
-                  Account Information
+                  Account Profile Information
                 </h3>
                 <p className="mt-2 text-xs text-slate-600">
-                  Your name, email address, and encrypted authentication credentials when you register for an Automation account.
+                  Your name, email address, and encrypted credentials when registering an Automation user account.
                 </p>
               </div>
 
               <div className="rounded-xl border border-slate-100 bg-slate-50/70 p-4">
                 <h3 className="font-semibold text-slate-900 flex items-center gap-2 text-sm">
-                  <Eye className="h-4 w-4 text-blue-600" />
-                  Instagram Account Data
+                  <Eye className="h-4 w-4 text-pink-600" />
+                  Meta (Instagram) Account Data
                 </h3>
                 <p className="mt-2 text-xs text-slate-600">
-                  When you connect an Instagram Professional account via Meta OAuth: your Instagram User ID, username, account type, and profile picture URL.
+                  When you connect via Meta OAuth: your Instagram Business Account ID, username, profile picture URL, and account type.
                 </p>
               </div>
 
               <div className="rounded-xl border border-slate-100 bg-slate-50/70 p-4">
                 <h3 className="font-semibold text-slate-900 flex items-center gap-2 text-sm">
-                  <Lock className="h-4 w-4 text-blue-600" />
-                  OAuth Access Tokens
+                  <Eye className="h-4 w-4 text-red-600" />
+                  YouTube (Google) Account Data
                 </h3>
                 <p className="mt-2 text-xs text-slate-600">
-                  System User and access tokens provided by Meta, strictly encrypted at rest with industry-standard AES-256-GCM algorithms.
+                  When connecting via Google OAuth: your YouTube Channel ID, channel title, channel avatar thumbnail, and publication status.
+                </p>
+              </div>
+
+              <div className="rounded-xl border border-slate-100 bg-slate-50/70 p-4">
+                <h3 className="font-semibold text-slate-900 flex items-center gap-2 text-sm">
+                  <Eye className="h-4 w-4 text-slate-900" />
+                  TikTok Account Data
+                </h3>
+                <p className="mt-2 text-xs text-slate-600">
+                  When connecting via TikTok OAuth: your TikTok Open ID, display name, avatar URL, and authorized publishing scopes.
+                </p>
+              </div>
+
+              <div className="rounded-xl border border-slate-100 bg-slate-50/70 p-4">
+                <h3 className="font-semibold text-slate-900 flex items-center gap-2 text-sm">
+                  <Lock className="h-4 w-4 text-emerald-600" />
+                  Encrypted OAuth Tokens
+                </h3>
+                <p className="mt-2 text-xs text-slate-600">
+                  OAuth access tokens and refresh tokens granted by Meta, Google, and TikTok, encrypted at rest using military-grade AES-256-GCM encryption.
                 </p>
               </div>
 
@@ -105,7 +137,7 @@ export const PrivacyPolicy: React.FC = () => {
                   Content & Media Files
                 </h3>
                 <p className="mt-2 text-xs text-slate-600">
-                  Post captions, schedules, photos, and video Reels uploaded by you for publishing to your authorized connected accounts.
+                  Captions, video titles, scheduled publishing dates, photos, and video files (standard videos, Reels, Shorts) uploaded by you for publishing.
                 </p>
               </div>
             </div>
@@ -119,16 +151,16 @@ export const PrivacyPolicy: React.FC = () => {
             </h2>
             <ul className="list-disc pl-5 space-y-2">
               <li>
-                <strong>Publishing & Scheduling:</strong> To transmit and publish your scheduled photos, carousel posts, and video Reels directly to your designated Instagram accounts via official Meta Graph API endpoints.
+                <strong>Publishing & Scheduling:</strong> To transmit and publish your scheduled media directly to your designated Meta Instagram, YouTube, and TikTok accounts via official developer APIs.
               </li>
               <li>
-                <strong>Profile Display:</strong> To display connected usernames, profile avatars, and connection health status within your personal SaaS dashboard.
+                <strong>Token Auto-Refresh:</strong> To automatically renew expired access tokens using your encrypted refresh tokens without requiring repeated logins.
               </li>
               <li>
-                <strong>Analytics & Insights:</strong> To calculate aggregate publishing performance metrics (total posts published, scheduled queue, and success/failure statuses).
+                <strong>Workspace Management:</strong> To display connected channel avatars, usernames, and publishing health statuses within your private SaaS dashboard.
               </li>
               <li>
-                <strong>Strict Prohibition on Data Sale:</strong> We <strong>never sell, rent, lease, or monetize</strong> your personal data, media, or Meta account information to third-party data brokers, advertisers, or marketing agencies.
+                <strong>Strict Prohibition on Data Sale:</strong> We <strong>never sell, rent, monetize, or lease</strong> your personal data, media, or social account information to third-party data brokers, advertisers, or AI training datasets.
               </li>
             </ul>
           </section>
@@ -137,28 +169,69 @@ export const PrivacyPolicy: React.FC = () => {
           <section>
             <h2 className="text-xl font-bold text-slate-900 mb-3 flex items-center gap-2">
               <span className="flex h-7 w-7 items-center justify-center rounded-md bg-blue-100 text-blue-700 text-sm font-semibold">4</span>
-              Meta Platform & Third-Party Integration
+              Third-Party Platform Policies & Compliance
             </h2>
             <p>
-              Our application integrates with the official <strong>Meta Graph API</strong> (Instagram API with Unified Login). By connecting your Instagram account, you acknowledge that your usage of Instagram features is also governed by:
+              Our application uses official developer APIs and complies with all governing platform policies:
             </p>
-            <div className="mt-3 flex flex-wrap gap-4 text-sm font-medium">
-              <a
-                href="https://www.facebook.com/terms.php"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-blue-600 hover:underline"
-              >
-                Meta Terms of Service &rarr;
-              </a>
-              <a
-                href="https://privacycenter.instagram.com/policy"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-blue-600 hover:underline"
-              >
-                Instagram Privacy Policy &rarr;
-              </a>
+
+            {/* Meta */}
+            <div className="mt-4 p-4 rounded-xl border border-slate-200 bg-slate-50/50">
+              <h3 className="font-bold text-slate-900 text-sm flex items-center gap-2">
+                <span className="w-2 h-2 rounded-full bg-pink-500"></span>
+                Meta Platforms (Instagram API)
+              </h3>
+              <p className="text-xs text-slate-600 mt-1">
+                Usage of Instagram publishing features is subject to the{' '}
+                <a href="https://www.facebook.com/terms.php" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline inline-flex items-center gap-0.5">
+                  Meta Terms of Service <ExternalLink className="w-3 h-3 inline" />
+                </a>{' '}
+                and the{' '}
+                <a href="https://privacycenter.instagram.com/policy" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline inline-flex items-center gap-0.5">
+                  Instagram Privacy Policy <ExternalLink className="w-3 h-3 inline" />
+                </a>.
+              </p>
+            </div>
+
+            {/* YouTube / Google */}
+            <div className="mt-3 p-4 rounded-xl border border-slate-200 bg-slate-50/50">
+              <h3 className="font-bold text-slate-900 text-sm flex items-center gap-2">
+                <span className="w-2 h-2 rounded-full bg-red-600"></span>
+                YouTube API Services (Google LLC)
+              </h3>
+              <p className="text-xs text-slate-600 mt-1">
+                Automation utilizes YouTube API Services. By connecting your YouTube account, you agree to be bound by the{' '}
+                <a href="https://www.youtube.com/t/terms" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline inline-flex items-center gap-0.5">
+                  YouTube Terms of Service <ExternalLink className="w-3 h-3 inline" />
+                </a>{' '}
+                and the{' '}
+                <a href="https://policies.google.com/privacy" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline inline-flex items-center gap-0.5">
+                  Google Privacy Policy <ExternalLink className="w-3 h-3 inline" />
+                </a>.
+              </p>
+              <div className="mt-2 text-xs bg-amber-50 text-amber-800 p-2.5 rounded-lg border border-amber-200">
+                <strong>Google API Limited Use Disclosure:</strong> Automation's use and transfer to any other app of information received from Google APIs adheres to the{' '}
+                <a href="https://developers.google.com/terms/api-services-user-data-policy" target="_blank" rel="noopener noreferrer" className="underline font-semibold">
+                  Google API Services User Data Policy
+                </a>, including the Limited Use requirements.
+              </div>
+            </div>
+
+            {/* TikTok */}
+            <div className="mt-3 p-4 rounded-xl border border-slate-200 bg-slate-50/50">
+              <h3 className="font-bold text-slate-900 text-sm flex items-center gap-2">
+                <span className="w-2 h-2 rounded-full bg-slate-900"></span>
+                TikTok Developer Platform
+              </h3>
+              <p className="text-xs text-slate-600 mt-1">
+                Connecting and publishing to TikTok is governed by the{' '}
+                <a href="https://www.tiktok.com/legal/page/row/terms-of-service/en" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline inline-flex items-center gap-0.5">
+                  TikTok Terms of Service <ExternalLink className="w-3 h-3 inline" />
+                </a>,{' '}
+                <a href="https://www.tiktok.com/legal/page/row/privacy-policy/en" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline inline-flex items-center gap-0.5">
+                  TikTok Privacy Policy <ExternalLink className="w-3 h-3 inline" />
+                </a>, and TikTok Developer Terms.
+              </p>
             </div>
           </section>
 
@@ -168,16 +241,16 @@ export const PrivacyPolicy: React.FC = () => {
               <span className="flex h-7 w-7 items-center justify-center rounded-md bg-blue-100 text-blue-700 text-sm font-semibold">5</span>
               Data Storage & Security Measures
             </h2>
-            <p>We implement rigorous security practices to protect your data:</p>
-            <ul className="mt-3 list-disc pl-5 space-y-2">
+            <p>We employ state-of-the-art security safeguards:</p>
+            <ul className="mt-3 list-disc pl-5 space-y-2 text-sm">
               <li>
-                <strong>AES-256-GCM Encryption:</strong> All social media OAuth tokens are encrypted before being written to our database and decrypted only in-memory when communicating with official Meta API servers.
+                <strong>AES-256-GCM Encryption:</strong> All tokens (Meta, YouTube, TikTok) are encrypted before writing to persistent storage and decrypted only ephemeral in-memory during active publish requests.
               </li>
               <li>
-                <strong>Multi-Tenant Data Isolation:</strong> Every user operates within an isolated workspace keyed by <code className="rounded bg-slate-100 px-1.5 py-0.5 text-xs text-slate-800">userId</code>. No user can access or view another user's accounts, tokens, or posts.
+                <strong>Workspace Multi-Tenant Isolation:</strong> Every record is keyed strictly to the authenticated user ID. Cross-tenant access is prohibited at both ORM and database layer.
               </li>
               <li>
-                <strong>Secure Transports:</strong> All API communication and file deliveries occur over HTTPS with modern TLS encryption and anti-CSRF token protection.
+                <strong>Secure Transport:</strong> All communication between your browser, our backend, and third-party APIs occurs exclusively over TLS 1.3/HTTPS with anti-CSRF token protection.
               </li>
             </ul>
           </section>
@@ -186,25 +259,35 @@ export const PrivacyPolicy: React.FC = () => {
           <section>
             <h2 className="text-xl font-bold text-slate-900 mb-3 flex items-center gap-2">
               <span className="flex h-7 w-7 items-center justify-center rounded-md bg-blue-100 text-blue-700 text-sm font-semibold">6</span>
-              User Rights & Data Deletion Instructions
+              User Rights, Disconnection & Data Deletion
             </h2>
             <p>
-              In accordance with Meta Platform Policy and data privacy regulations, you retain complete ownership and control over your data:
+              You maintain 100% ownership of your accounts and may revoke access or delete your stored data at any time through multiple channels:
             </p>
+            
             <div className="mt-4 rounded-xl border border-blue-100 bg-blue-50/50 p-5 space-y-3">
               <h3 className="font-bold text-slate-900 flex items-center gap-2 text-sm">
                 <Trash2 className="h-4 w-4 text-blue-600" />
-                How to Delete Your Data & Revoke Access
+                How to Revoke Access & Delete Data:
               </h3>
-              <ol className="list-decimal pl-5 space-y-1.5 text-sm text-slate-600">
+              <ol className="list-decimal pl-5 space-y-2 text-sm text-slate-600">
                 <li>
-                  <strong>Disconnect via Dashboard:</strong> Navigate to <strong>Social Accounts</strong> in your dashboard and click <strong>Disconnect</strong> on any linked Instagram account. This immediately cascades and deletes all associated access tokens and publishing authorizations from our database.
+                  <strong>Direct Dashboard Disconnection:</strong> In Automation, go to <strong>Social Accounts</strong> and click <strong>Disconnect</strong> on any linked Meta, YouTube, or TikTok account. This immediately and permanently deletes the corresponding access tokens, refresh tokens, and scheduled drafts from our database.
                 </li>
                 <li>
-                  <strong>Revoke via Instagram:</strong> You can revoke Automation's permissions directly in your Instagram settings at <em>Settings & Privacy &gt; Website Permissions &gt; Apps and Websites &gt; Active &gt; Remove</em>.
+                  <strong>Revoke Meta Access:</strong> In Instagram, navigate to <em>Settings &gt; Website Permissions &gt; Apps and Websites &gt; Active &gt; Remove</em>.
                 </li>
                 <li>
-                  <strong>Account Deletion Request:</strong> If you wish to delete your entire Automation user account and all stored media/history, you may submit a deletion request to our support email below. All records will be permanently purged within 30 days.
+                  <strong>Revoke Google/YouTube Access:</strong> You can view and revoke Automation's access at any time via the{' '}
+                  <a href="https://myaccount.google.com/permissions" target="_blank" rel="noopener noreferrer" className="text-blue-600 underline font-medium">
+                    Google Security Settings Permissions Page
+                  </a>.
+                </li>
+                <li>
+                  <strong>Revoke TikTok Access:</strong> In the TikTok app, go to <em>Settings and Privacy &gt; Security &gt; Manage App Permissions</em> and remove Automation.
+                </li>
+                <li>
+                  <strong>Full Account Purge Request:</strong> To request deletion of your entire user account, profile, and media history, email our privacy team at <strong>privacy@automation.bikinkafe.id</strong>. All data will be permanently wiped within 14 days.
                 </li>
               </ol>
             </div>
@@ -217,11 +300,11 @@ export const PrivacyPolicy: React.FC = () => {
               Contact Us
             </h2>
             <p>
-              If you have any questions, concerns, or requests regarding this Privacy Policy or your data, please contact our Data Protection team:
+              If you have any questions or data privacy inquiries regarding this Privacy Policy or platform compliance, please contact our team:
             </p>
             <div className="mt-3 flex items-center gap-2 text-sm font-semibold text-slate-900">
               <Mail className="h-4 w-4 text-blue-600" />
-              <span>support@automation.dev</span>
+              <span>privacy@automation.bikinkafe.id</span>
             </div>
           </section>
         </div>
