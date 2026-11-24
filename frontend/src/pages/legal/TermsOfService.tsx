@@ -176,7 +176,10 @@ export const TermsOfService: React.FC = () => {
               Contact Us
             </h2>
             <p className="text-sm">
-              For questions regarding these Terms, contact our legal team at: <strong>legal@automation.bikinkafe.id</strong>.
+              For questions regarding these Terms, contact our legal team at:{' '}
+              <a href="mailto:jimlyasidqi23@gmail.com" className="font-semibold text-blue-600 hover:underline">
+                jimlyasidqi23@gmail.com
+              </a>.
             </p>
           </section>
         </div>

@@ -287,7 +287,7 @@ export const PrivacyPolicy: React.FC = () => {
                   <strong>Revoke TikTok Access:</strong> In the TikTok app, go to <em>Settings and Privacy &gt; Security &gt; Manage App Permissions</em> and remove Automation.
                 </li>
                 <li>
-                  <strong>Full Account Purge Request:</strong> To request deletion of your entire user account, profile, and media history, email our privacy team at <strong>privacy@automation.bikinkafe.id</strong>. All data will be permanently wiped within 14 days.
+                  <strong>Full Account Purge Request:</strong> To request deletion of your entire user account, profile, and media history, email our privacy team at <a href="mailto:jimlyasidqi23@gmail.com" className="font-semibold text-blue-600 hover:underline">jimlyasidqi23@gmail.com</a>. All data will be permanently wiped within 14 days.
                 </li>
               </ol>
             </div>
@@ -304,7 +304,9 @@ export const PrivacyPolicy: React.FC = () => {
             </p>
             <div className="mt-3 flex items-center gap-2 text-sm font-semibold text-slate-900">
               <Mail className="h-4 w-4 text-blue-600" />
-              <span>privacy@automation.bikinkafe.id</span>
+              <a href="mailto:jimlyasidqi23@gmail.com" className="text-blue-600 hover:underline">
+                jimlyasidqi23@gmail.com
+              </a>
             </div>
           </section>
         </div>
