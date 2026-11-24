@@ -8,6 +8,18 @@
   html, body {
     font-family: 'Plus Jakarta Sans', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
   }
+
+  html.dark {
+    color-scheme: dark;
+    background-color: #090a0f;
+    color: #f4f4f5;
+  }
+
+  html:not(.dark) {
+    color-scheme: light;
+    background-color: #f8fafc;
+    color: #0f172a;
+  }
 }
 
 /* Custom subtle scrollbar */
@@ -18,10 +30,17 @@
 ::-webkit-scrollbar-track {
   background: transparent;
 }
-::-webkit-scrollbar-thumb {
+.dark ::-webkit-scrollbar-thumb {
+  background: #272a38;
+  border-radius: 9999px;
+}
+.dark ::-webkit-scrollbar-thumb:hover {
+  background: #3e4258;
+}
+html:not(.dark) ::-webkit-scrollbar-thumb {
   background: #cbd5e1;
   border-radius: 9999px;
 }
-::-webkit-scrollbar-thumb:hover {
+html:not(.dark) ::-webkit-scrollbar-thumb:hover {
   background: #94a3b8;
 }

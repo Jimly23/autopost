@@ -153,20 +153,20 @@ export const Posts: React.FC = () => {
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
-          <h1 className="text-xl sm:text-2xl font-bold text-slate-900 tracking-tight">Posts</h1>
-          <p className="text-xs sm:text-sm text-slate-500 mt-1">
-            Manage your content pipeline, drafts, scheduled jobs, and published history.
+          <h1 className="text-xl sm:text-2xl font-bold text-slate-900 dark:text-white tracking-tight">Riwayat Publikasi</h1>
+          <p className="text-xs sm:text-sm text-slate-500 dark:text-zinc-400 mt-1">
+            Kelola alur pipeline konten, draf, jadwal otomatis, dan riwayat yang telah terbit.
           </p>
         </div>
         <Link to="/create">
           <Button variant="primary" size="sm" icon={<PlusCircle className="w-4 h-4" />}>
-            Create Post
+            Buat Postingan
           </Button>
         </Link>
       </div>
 
       {/* Tabs & Search Filter */}
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 border-b border-slate-200 pb-3">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 border-b border-slate-200 dark:border-white/[0.08] pb-3">
         <div className="flex items-center gap-1 overflow-x-auto pb-1 sm:pb-0 scrollbar-none">
           {STATUS_TABS.map((tab) => {
             const isActive = activeTab === tab.value;
@@ -177,10 +177,10 @@ export const Posts: React.FC = () => {
                   setActiveTab(tab.value);
                   setPage(1);
                 }}
-                className={`px-3 py-1.5 rounded-lg text-xs font-semibold whitespace-nowrap transition-colors ${
+                className={`px-3 py-1.5 rounded-xl text-xs font-semibold whitespace-nowrap transition-colors ${
                   isActive
                     ? 'bg-blue-600 text-white shadow-xs'
-                    : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100'
+                    : 'text-slate-600 dark:text-zinc-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-white/[0.05]'
                 }`}
               >
                 {tab.label}
@@ -200,7 +200,7 @@ export const Posts: React.FC = () => {
       </div>
 
       {/* Posts Table / Card */}
-      <Card className="overflow-hidden border-slate-200/90">
+      <Card className="overflow-hidden">
         <CardContent className="p-0">
           {loading ? (
             <div className="p-6 space-y-4">
@@ -210,7 +210,7 @@ export const Posts: React.FC = () => {
             </div>
           ) : filteredPosts.length === 0 ? (
             <EmptyState
-              icon={<FileText className="w-8 h-8 text-slate-400" />}
+              icon={<FileText className="w-8 h-8 text-slate-400 dark:text-zinc-500" />}
               title="No posts found"
               description={
                 activeTab
@@ -222,15 +222,15 @@ export const Posts: React.FC = () => {
               className="border-0 bg-transparent py-12"
             />
           ) : (
-            <div className="divide-y divide-slate-100">
+            <div className="divide-y divide-slate-100 dark:divide-white/[0.05]">
               {filteredPosts.map((post) => (
                 <div
                   key={post.id}
-                  className="p-4 sm:p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-4 hover:bg-slate-50/60 transition-colors"
+                  className="p-4 sm:p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-4 hover:bg-slate-50/60 dark:hover:bg-white/[0.02] transition-colors"
                 >
                   {/* Left: Thumbnail & Content */}
                   <div className="flex items-start gap-4 min-w-0 flex-1">
-                    <div className="w-14 h-14 rounded-lg bg-slate-100 border border-slate-200 overflow-hidden shrink-0 flex items-center justify-center">
+                    <div className="w-14 h-14 rounded-xl bg-slate-100 dark:bg-zinc-800 border border-slate-200/80 dark:border-white/10 overflow-hidden shrink-0 flex items-center justify-center">
                       {post.mediaType === 'IMAGE' ? (
                         <img
                           src={post.mediaUrl}
@@ -241,17 +241,17 @@ export const Posts: React.FC = () => {
                           }}
                         />
                       ) : (
-                        <div className="text-[10px] font-bold text-slate-500">VIDEO</div>
+                        <div className="text-[10px] font-bold text-slate-500 dark:text-zinc-400">VIDEO</div>
                       )}
                     </div>
 
                     <div className="min-w-0 flex-1">
                       <div className="flex items-center gap-2 mb-1">
                         <Badge status={post.status} size="sm" />
-                        <span className="text-xs font-semibold text-slate-700 flex items-center gap-1">
+                        <span className="text-xs font-semibold text-slate-700 dark:text-zinc-200 flex items-center gap-1">
                           {post.socialAccount?.platform === 'youtube' ? (
                             <>
-                              <Youtube className="w-3.5 h-3.5 text-red-600" />
+                              <Youtube className="w-3.5 h-3.5 text-red-600 dark:text-red-400" />
                               {post.socialAccount?.username || 'YouTube'}
                             </>
                           ) : (
@@ -261,36 +261,36 @@ export const Posts: React.FC = () => {
                             </>
                           )}
                         </span>
-                        <span className="text-[11px] text-slate-400">
+                        <span className="text-[11px] text-slate-400 dark:text-zinc-500">
                           {new Date(post.createdAt).toLocaleDateString()}
                         </span>
                       </div>
 
                       {post.title && (
-                        <h4 className="text-xs font-bold text-slate-900 mb-0.5 line-clamp-1">
+                        <h4 className="text-xs font-bold text-slate-900 dark:text-white mb-0.5 line-clamp-1">
                           {post.title}
                         </h4>
                       )}
 
-                      <p className="text-xs text-slate-800 line-clamp-2 leading-relaxed">
-                        {post.caption || <span className="text-slate-400 italic">(No caption provided)</span>}
+                      <p className="text-xs text-slate-800 dark:text-zinc-300 line-clamp-2 leading-relaxed">
+                        {post.caption || <span className="text-slate-400 dark:text-zinc-500 italic">(No caption provided)</span>}
                       </p>
 
                       {post.scheduledAt && post.status === 'scheduled' && (
-                        <p className="text-[11px] text-blue-600 font-medium flex items-center gap-1 mt-1">
+                        <p className="text-[11px] text-blue-600 dark:text-blue-400 font-medium flex items-center gap-1 mt-1">
                           <Clock className="w-3 h-3" />
                           Scheduled for: {new Date(post.scheduledAt).toLocaleString()}
                         </p>
                       )}
 
                       {post.publishedAt && (
-                        <p className="text-[11px] text-emerald-600 font-medium flex items-center gap-1 mt-1">
+                        <p className="text-[11px] text-emerald-600 dark:text-emerald-400 font-medium flex items-center gap-1 mt-1">
                           Published: {new Date(post.publishedAt).toLocaleString()}
                         </p>
                       )}
 
                       {post.errorMessage && (
-                        <p className="text-[11px] text-rose-600 font-medium flex items-center gap-1 mt-1">
+                        <p className="text-[11px] text-rose-600 dark:text-rose-400 font-medium flex items-center gap-1 mt-1">
                           <AlertCircle className="w-3 h-3 shrink-0" />
                           Error: {post.errorMessage}
                         </p>

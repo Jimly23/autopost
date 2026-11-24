@@ -48,18 +48,18 @@ export const Modal: React.FC<ModalProps> = ({
 
       {/* Modal Dialog */}
       <div
-        className={`relative w-full ${maxWidthStyles[maxWidth]} bg-white rounded-xl shadow-xl border border-slate-200 overflow-hidden z-10 animate-in zoom-in-95 duration-200`}
+        className={`relative w-full ${maxWidthStyles[maxWidth]} bg-white dark:bg-[#12131a] rounded-2xl shadow-xl border border-slate-200 dark:border-white/10 overflow-hidden z-10 animate-in zoom-in-95 duration-200`}
         onClick={(e) => e.stopPropagation()}
       >
         {(title || description) && (
-          <div className="px-6 pt-5 pb-4 border-b border-slate-100 flex items-start justify-between">
+          <div className="px-6 pt-5 pb-4 border-b border-slate-100 dark:border-white/[0.06] flex items-start justify-between">
             <div>
-              {title && <h3 className="text-base font-semibold text-slate-900">{title}</h3>}
-              {description && <p className="text-xs text-slate-500 mt-1">{description}</p>}
+              {title && <h3 className="text-base font-semibold text-slate-900 dark:text-white">{title}</h3>}
+              {description && <p className="text-xs text-slate-500 dark:text-zinc-400 mt-1">{description}</p>}
             </div>
             <button
               onClick={onClose}
-              className="text-slate-400 hover:text-slate-600 p-1 rounded-md hover:bg-slate-100 transition-colors -mr-2 -mt-1"
+              className="text-slate-400 dark:text-zinc-500 hover:text-slate-600 dark:hover:text-white p-1 rounded-md hover:bg-slate-100 dark:hover:bg-white/[0.06] transition-colors -mr-2 -mt-1"
             >
               <X className="w-4 h-4" />
             </button>

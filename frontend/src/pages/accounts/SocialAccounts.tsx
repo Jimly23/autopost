@@ -122,9 +122,9 @@ export const SocialAccounts: React.FC = () => {
       {/* Page Header */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
-          <h1 className="text-xl sm:text-2xl font-bold text-slate-900 tracking-tight">Social Accounts</h1>
-          <p className="text-xs sm:text-sm text-slate-500 mt-1">
-            Connect and manage your Instagram & YouTube channels for automated content publishing.
+          <h1 className="text-xl sm:text-2xl font-bold text-slate-900 dark:text-white tracking-tight">Koneksi Akun</h1>
+          <p className="text-xs sm:text-sm text-slate-500 dark:text-zinc-400 mt-1">
+            Hubungkan dan kelola channel Instagram, YouTube, dan TikTok untuk automasi publikasi konten.
           </p>
         </div>
         <div className="flex items-center gap-2.5">
@@ -141,8 +141,8 @@ export const SocialAccounts: React.FC = () => {
             variant="secondary"
             size="sm"
             onClick={handleConnectYouTube}
-            className="border-red-200 bg-red-50 text-red-700 hover:bg-red-100"
-            icon={<Youtube className="w-4 h-4 text-red-600" />}
+            className="border-red-200 dark:border-red-500/20 bg-red-50 dark:bg-red-500/10 text-red-700 dark:text-red-400 hover:bg-red-100 dark:hover:bg-red-500/20"
+            icon={<Youtube className="w-4 h-4 text-red-600 dark:text-red-400" />}
           >
             Connect YouTube
           </Button>
@@ -172,30 +172,30 @@ export const SocialAccounts: React.FC = () => {
               : `https://instagram.com/${acc.username}`;
 
             return (
-              <Card key={acc.id} hover className="overflow-hidden border-slate-200/90 flex flex-col justify-between">
+              <Card key={acc.id} hover className="overflow-hidden flex flex-col justify-between">
                 <div>
-                  <CardHeader className="bg-slate-50/50">
+                  <CardHeader className="bg-slate-50/50 dark:bg-white/[0.02]">
                     <div className="flex items-center gap-2">
                       <span className={`w-2 h-2 rounded-full ${isYT ? 'bg-red-500' : 'bg-pink-500'}`} />
-                      <span className="text-xs font-semibold text-slate-700 capitalize flex items-center gap-1.5">
+                      <span className="text-xs font-semibold text-slate-700 dark:text-zinc-200 capitalize flex items-center gap-1.5">
                         {isYT ? (
                           <>
-                            <Youtube className="w-3.5 h-3.5 text-red-600 inline" /> YouTube Channel
+                            <Youtube className="w-3.5 h-3.5 text-red-600 dark:text-red-400 inline" /> YouTube Channel
                           </>
                         ) : (
                           <>
-                            <Instagram className="w-3.5 h-3.5 text-pink-600 inline" /> Instagram Business
+                            <Instagram className="w-3.5 h-3.5 text-pink-600 dark:text-pink-400 inline" /> Instagram Business
                           </>
                         )}
                       </span>
                     </div>
-                    <span className="text-[11px] text-slate-400 font-mono">
+                    <span className="text-[11px] text-slate-400 dark:text-zinc-500 font-mono">
                       ID: {acc.platformUserId ? (acc.platformUserId.length > 10 ? acc.platformUserId.slice(0, 10) + '...' : acc.platformUserId) : 'N/A'}
                     </span>
                   </CardHeader>
 
                   <div className="p-5 flex items-start gap-4">
-                    <div className="w-12 h-12 rounded-full border border-slate-200 bg-slate-100 shrink-0 overflow-hidden flex items-center justify-center">
+                    <div className="w-12 h-12 rounded-full border border-slate-200 dark:border-white/10 bg-slate-100 dark:bg-zinc-800 shrink-0 overflow-hidden flex items-center justify-center">
                       {acc.profilePicture ? (
                         <img src={acc.profilePicture} alt={acc.username} className="w-full h-full object-cover" />
                       ) : isYT ? (
@@ -206,31 +206,31 @@ export const SocialAccounts: React.FC = () => {
                     </div>
                     <div className="min-w-0 flex-1">
                       <div className="flex items-center gap-1.5">
-                        <h4 className="text-sm font-bold text-slate-900 truncate">
+                        <h4 className="text-sm font-bold text-slate-900 dark:text-white truncate">
                           {isYT ? acc.username : `@${acc.username}`}
                         </h4>
                         <a
                           href={externalUrl}
                           target="_blank"
                           rel="noreferrer"
-                          className="text-slate-400 hover:text-slate-600"
+                          className="text-slate-400 dark:text-zinc-500 hover:text-slate-600 dark:hover:text-zinc-300"
                           title={`View ${isYT ? 'YouTube Channel' : 'Instagram Profile'}`}
                         >
                           <ExternalLink className="w-3.5 h-3.5" />
                         </a>
                       </div>
-                      <p className="text-xs text-slate-500 mt-0.5">
+                      <p className="text-xs text-slate-500 dark:text-zinc-400 mt-0.5">
                         Connected: {acc.createdAt ? new Date(acc.createdAt).toLocaleDateString() : 'Active'}
                       </p>
 
                       {/* Token Status Badge */}
                       <div className="mt-3">
                         {acc.tokenStatus?.isExpired ? (
-                          <span className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded text-[11px] font-medium bg-rose-50 text-rose-700 border border-rose-200">
+                          <span className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded text-[11px] font-medium bg-rose-50 dark:bg-rose-500/10 text-rose-700 dark:text-rose-400 border border-rose-200 dark:border-rose-500/20">
                             <AlertTriangle className="w-3 h-3 text-rose-500" /> Token Expired (Reconnect)
                           </span>
                         ) : (
-                          <span className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded text-[11px] font-medium bg-emerald-50 text-emerald-700 border border-emerald-200">
+                          <span className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded text-[11px] font-medium bg-emerald-50 dark:bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-500/20">
                             <ShieldCheck className="w-3 h-3 text-emerald-500" /> Token Active & Auto-Refreshed
                           </span>
                         )}
@@ -240,7 +240,7 @@ export const SocialAccounts: React.FC = () => {
                 </div>
 
                 {/* Account Actions */}
-                <div className="px-5 py-3 bg-slate-50/70 border-t border-slate-100 flex items-center justify-between text-xs">
+                <div className="px-5 py-3 bg-slate-50/70 dark:bg-white/[0.02] border-t border-slate-100 dark:border-white/[0.06] flex items-center justify-between text-xs">
                   <Button
                     variant="ghost"
                     size="sm"
@@ -258,7 +258,7 @@ export const SocialAccounts: React.FC = () => {
                       setAccountToDisconnect(acc);
                       setDisconnectModalOpen(true);
                     }}
-                    className="text-rose-600 hover:text-rose-700 hover:bg-rose-50"
+                    className="text-rose-600 dark:text-rose-400 hover:text-rose-700 hover:bg-rose-50 dark:hover:bg-rose-500/10"
                     icon={<Trash2 className="w-3.5 h-3.5" />}
                   >
                     Disconnect

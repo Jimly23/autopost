@@ -2,6 +2,7 @@ import React from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { AuthProvider } from './contexts/AuthContext';
 import { ToastProvider } from './contexts/ToastContext';
+import { ThemeProvider } from './contexts/ThemeContext';
 import { ProtectedRoute, PublicRoute } from './components/layout/ProtectedRoute';
 import { DashboardLayout } from './components/layout/DashboardLayout';
 
@@ -27,9 +28,10 @@ import { TermsOfService } from './pages/legal/TermsOfService';
 export const App: React.FC = () => {
   return (
     <BrowserRouter>
-      <ToastProvider>
-        <AuthProvider>
-          <Routes>
+      <ThemeProvider>
+        <ToastProvider>
+          <AuthProvider>
+            <Routes>
             {/* Public Legal Pages (Meta, Google, TikTok Compliance) */}
             <Route path="/privacy" element={<PrivacyPolicy />} />
             <Route path="/privacy-policy" element={<PrivacyPolicy />} />
@@ -64,8 +66,9 @@ export const App: React.FC = () => {
           </Routes>
         </AuthProvider>
       </ToastProvider>
-    </BrowserRouter>
-  );
+    </ThemeProvider>
+  </BrowserRouter>
+);
 };
 
 export default App;

@@ -326,8 +326,8 @@ export const CreatePost: React.FC = () => {
     <div className="space-y-6 animate-in fade-in duration-200">
       {/* Page Header */}
       <div>
-        <h1 className="text-xl sm:text-2xl font-bold text-slate-900 tracking-tight">Create & Schedule Post</h1>
-        <p className="text-xs sm:text-sm text-slate-500 mt-1">
+        <h1 className="text-xl sm:text-2xl font-bold text-slate-900 dark:text-white tracking-tight">Buat & Jadwalkan Postingan</h1>
+        <p className="text-xs sm:text-sm text-slate-500 dark:text-zinc-400 mt-1">
           Pilih file foto atau video dari perangkat Anda, atur detail postingan, lalu jadwalkan atau publikasikan langsung ke Instagram atau YouTube.
         </p>
       </div>

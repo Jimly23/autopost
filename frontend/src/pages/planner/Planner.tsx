@@ -141,33 +141,33 @@ export const Planner: React.FC = () => {
       {/* Header & Month Navigation */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
-          <h1 className="text-xl sm:text-2xl font-bold text-slate-900 tracking-tight">Content Planner</h1>
-          <p className="text-xs sm:text-sm text-slate-500 mt-1">
-            Visual calendar for scheduled content across all connected channels.
+          <h1 className="text-xl sm:text-2xl font-bold text-slate-900 dark:text-white tracking-tight">Jadwal Planner</h1>
+          <p className="text-xs sm:text-sm text-slate-500 dark:text-zinc-400 mt-1">
+            Kalender visual untuk penjadwalan konten otomatis di seluruh channel terhubung.
           </p>
         </div>
 
         <div className="flex items-center gap-2">
-          <div className="flex items-center bg-white border border-slate-200/90 rounded-lg p-0.5 shadow-xs">
+          <div className="flex items-center bg-white dark:bg-[#161722] border border-slate-200/90 dark:border-white/10 rounded-xl p-0.5 shadow-xs">
             <button
               onClick={handlePrevMonth}
-              className="p-1.5 text-slate-500 hover:text-slate-800 hover:bg-slate-50 rounded"
+              className="p-1.5 text-slate-500 dark:text-zinc-400 hover:text-slate-800 dark:hover:text-white hover:bg-slate-50 dark:hover:bg-white/[0.05] rounded-lg"
             >
               <ChevronLeft className="w-4 h-4" />
             </button>
-            <span className="px-3 text-xs font-bold text-slate-800 min-w-32 text-center">
+            <span className="px-3 text-xs font-bold text-slate-800 dark:text-white min-w-32 text-center">
               {monthNames[month]} {year}
             </span>
             <button
               onClick={handleNextMonth}
-              className="p-1.5 text-slate-500 hover:text-slate-800 hover:bg-slate-50 rounded"
+              className="p-1.5 text-slate-500 dark:text-zinc-400 hover:text-slate-800 dark:hover:text-white hover:bg-slate-50 dark:hover:bg-white/[0.05] rounded-lg"
             >
               <ChevronRight className="w-4 h-4" />
             </button>
           </div>
 
           <Button variant="outline" size="sm" onClick={handleToday}>
-            Today
+            Hari ini
           </Button>
 
           <Button
@@ -176,15 +176,15 @@ export const Planner: React.FC = () => {
             onClick={() => navigate('/create')}
             icon={<PlusCircle className="w-4 h-4" />}
           >
-            New Schedule
+            Buat Jadwal
           </Button>
         </div>
       </div>
 
       {/* Calendar Grid */}
-      <Card className="overflow-hidden border-slate-200/90">
+      <Card className="overflow-hidden">
         {/* Day labels */}
-        <div className="grid grid-cols-7 border-b border-slate-200 bg-slate-50 text-center py-2.5 text-xs font-semibold text-slate-500 uppercase tracking-wider">
+        <div className="grid grid-cols-7 border-b border-slate-200 dark:border-white/[0.08] bg-slate-50 dark:bg-white/[0.02] text-center py-2.5 text-xs font-semibold text-slate-500 dark:text-zinc-400 uppercase tracking-wider">
           <span>Sun</span>
           <span>Mon</span>
           <span>Tue</span>
@@ -195,10 +195,10 @@ export const Planner: React.FC = () => {
         </div>
 
         {/* Days cells */}
-        <div className="grid grid-cols-7 divide-x divide-y divide-slate-100 bg-white">
+        <div className="grid grid-cols-7 divide-x divide-y divide-slate-100 dark:divide-white/[0.05] bg-white dark:bg-[#12131a]">
           {/* Empty offset padding for days before month start */}
           {Array.from({ length: firstDayOfMonth }).map((_, idx) => (
-            <div key={`empty-${idx}`} className="h-28 sm:h-32 bg-slate-50/40 p-2" />
+            <div key={`empty-${idx}`} className="h-28 sm:h-32 bg-slate-50/40 dark:bg-white/[0.01] p-2" />
           ))}
 
           {/* Days of current month */}
@@ -213,8 +213,8 @@ export const Planner: React.FC = () => {
             return (
               <div
                 key={`day-${dayNumber}`}
-                className={`h-28 sm:h-32 p-2 flex flex-col justify-between hover:bg-slate-50/60 transition-colors relative group ${
-                  isToday ? 'bg-blue-50/30' : ''
+                className={`h-28 sm:h-32 p-2 flex flex-col justify-between hover:bg-slate-50/60 dark:hover:bg-white/[0.03] transition-colors relative group ${
+                  isToday ? 'bg-blue-50/30 dark:bg-blue-500/10' : ''
                 }`}
               >
                 <div className="flex items-center justify-between">

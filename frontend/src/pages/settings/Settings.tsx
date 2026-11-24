@@ -73,9 +73,9 @@ export const Settings: React.FC = () => {
     <div className="max-w-3xl space-y-6 animate-in fade-in duration-200">
       {/* Header */}
       <div>
-        <h1 className="text-xl sm:text-2xl font-bold text-slate-900 tracking-tight">Account Settings</h1>
-        <p className="text-xs sm:text-sm text-slate-500 mt-1">
-          Manage your personal workspace details and security credentials.
+        <h1 className="text-xl sm:text-2xl font-bold text-slate-900 dark:text-white tracking-tight">Pengaturan Akun</h1>
+        <p className="text-xs sm:text-sm text-slate-500 dark:text-zinc-400 mt-1">
+          Kelola detail workspace personal dan kredensial keamanan akun Anda.
         </p>
       </div>
 

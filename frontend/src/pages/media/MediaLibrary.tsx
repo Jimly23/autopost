@@ -110,9 +110,9 @@ export const MediaLibrary: React.FC = () => {
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
-          <h1 className="text-xl sm:text-2xl font-bold text-slate-900 tracking-tight">Media Library</h1>
-          <p className="text-xs sm:text-sm text-slate-500 mt-1">
-            Koleksi file foto dan video yang diunggah untuk materi publikasi Instagram Anda.
+          <h1 className="text-xl sm:text-2xl font-bold text-slate-900 dark:text-white tracking-tight">Pustaka Media</h1>
+          <p className="text-xs sm:text-sm text-slate-500 dark:text-zinc-400 mt-1">
+            Koleksi file foto dan video yang diunggah untuk materi publikasi multi-platform Anda.
           </p>
         </div>
 
