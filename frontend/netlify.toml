@@ -21,6 +21,13 @@
   status = 200
   force = true
 
+# TikTok Developer verification signature file rewrite
+[[redirects]]
+  from = "*/tiktok-developers-site-verification.txt"
+  to = "/tiktok-developers-site-verification.txt"
+  status = 200
+  force = true
+
 # Single Page Application (SPA) fallback
 [[redirects]]
   from = "/*"
