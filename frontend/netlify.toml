@@ -21,6 +21,25 @@
   status = 200
   force = true
 
+# TikTok verification files - serve directly before SPA fallback
+[[redirects]]
+  from = "/terms-of-service/tiktok-developers-site-verification.txt"
+  to = "/terms-of-service/tiktok-developers-site-verification.txt"
+  status = 200
+  force = true
+
+[[redirects]]
+  from = "/privacy-policy/tiktok-developers-site-verification.txt"
+  to = "/privacy-policy/tiktok-developers-site-verification.txt"
+  status = 200
+  force = true
+
+[[redirects]]
+  from = "/tiktok-developers-site-verification.txt"
+  to = "/tiktok-developers-site-verification.txt"
+  status = 200
+  force = true
+
 # Single Page Application (SPA) fallback
 [[redirects]]
   from = "/*"
