@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Foxman — Social Media Automation & Video Publishing Platform</title>
+    <!-- Google Search Console Verification -->
+    <meta name="google-site-verification" content="1i6lsW8cG8pfb0d0TFGxno1N9OlNoG-7O49gIhwC7uA" />
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
