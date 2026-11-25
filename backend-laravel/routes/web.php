@@ -7,15 +7,23 @@ use Illuminate\Support\Facades\Route;
 $frontendUrl = rtrim(env('FRONTEND_URL', 'http://localhost:5173'), '/');
 
 Route::get('/', function () {
-    return response()->json(['message' => 'Automation API (Laravel 12)']);
+    return view('landing');
 });
 
-Route::get('/privacy', function () use ($frontendUrl) {
-    return redirect()->away("{$frontendUrl}/privacy");
+Route::get('/privacy', function () {
+    return view('privacy');
 });
 
-Route::get('/terms', function () use ($frontendUrl) {
-    return redirect()->away("{$frontendUrl}/terms");
+Route::get('/privacy-policy', function () {
+    return view('privacy');
+});
+
+Route::get('/terms', function () {
+    return view('terms');
+});
+
+Route::get('/terms-of-service', function () {
+    return view('terms');
 });
 
 Route::get('/uploads/{filename}', function (string $filename) {
